@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Astro and build output
+.astro/
+dist/
+.cache/
+
+# Test and coverage output
+coverage/
+playwright-report/
+test-results/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Hosting providers
+.netlify/
+.vercel/
+
+# Logs and editor/OS files
+*.log
+.DS_Store
+.idea/
+.vscode/

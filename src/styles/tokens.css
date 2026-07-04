@@ -1,0 +1,108 @@
+@import url('@fontsource-variable/inter/wght.css');
+@import url('@fontsource-variable/noto-sans-jp/wght.css');
+
+:root {
+  --font-sans:
+    'Inter Variable', 'Noto Sans JP Variable', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui,
+    -apple-system, 'BlinkMacSystemFont', 'Segoe UI', sans-serif;
+  --font-display: 'Object Sans', 'Inter Variable', system-ui, sans-serif;
+
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-heavy: 900;
+
+  --color-background: #0f0f0f;
+  --color-text: #ffffff;
+  --color-accent: #ff4d00;
+  --color-accent-dark: #b23600;
+  --color-text-muted: rgb(255 255 255 / 50%);
+  --color-nav-muted: rgb(255 255 255 / 60%);
+  --color-control: rgb(255 255 255 / 15%);
+  --color-panel: rgb(15 15 15 / 50%);
+  --color-border: #ffffff;
+  --color-border-muted: rgb(255 255 255 / 50%);
+  --color-texture-base: #e1e1e1;
+  --color-shadow: rgb(33 33 33 / 20%);
+  --color-focus: #ffffff;
+
+  --radius-chip: 4px;
+  --radius-control: 8px;
+  --radius-language: 32px;
+  --radius-round: 56px;
+
+  --border-width-default: 1px;
+  --border-width-accent: 2px;
+  --control-height: 56px;
+  --icon-size: 24px;
+  --social-size: 56px;
+  --social-expanded-width: 149px;
+  --social-padding-inline: 16px;
+  --social-content-gap: 10px;
+  --texture-opacity: 0.4;
+  --texture-wrapper-opacity: 0.5;
+
+  --type-hero-size: 90px;
+  --type-hero-line: 1;
+  --type-section-size: 64px;
+  --type-section-line: 1;
+  --type-contact-email-size: 128px;
+  --type-contact-email-line: 136px;
+  --type-stat-size: 88px;
+  --type-stat-line: 88px;
+  --type-lead-size: 32px;
+  --type-lead-line: 44.8px;
+  --type-contact-label-size: 32px;
+  --type-contact-label-line: 44px;
+  --type-eyebrow-size: 20px;
+  --type-eyebrow-line: 28px;
+  --type-nav-size: 16px;
+  --type-nav-line: 24px;
+  --type-body-xl-size: 24px;
+  --type-body-xl-line: 32px;
+  --type-body-lg-size: 20px;
+  --type-body-lg-line: 28px;
+  --type-body-md-size: 16px;
+  --type-body-md-line: 24px;
+  --type-body-sm-size: 14px;
+  --type-body-sm-line: 20px;
+  --type-caption-size: 12px;
+  --type-caption-line: 16px;
+  --type-chip-size: 12px;
+  --type-chip-line: 16px;
+
+  --shadow-soft: 0 2px 3px var(--color-shadow);
+  --focus-ring: 2px solid var(--color-focus);
+  --focus-ring-offset: 3px;
+
+  /* Implementation defaults: motion values are not specified in Figma. */
+  --motion-fast: 180ms;
+  --motion-normal: 300ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (width <= 767px) {
+  :root {
+    --type-hero-size: 36px;
+    --type-hero-line: 1;
+    --type-section-size: 32px;
+    --type-section-line: 1;
+    --type-contact-email-size: 24px;
+    --type-contact-email-line: 32px;
+    --type-stat-size: 32px;
+    --type-stat-line: 44px;
+    --type-lead-size: 16px;
+    --type-lead-line: 24px;
+    --type-contact-label-size: 16px;
+    --type-contact-label-line: 24px;
+    --type-eyebrow-size: 14px;
+    --type-eyebrow-line: 20px;
+    --type-body-xl-size: 16px;
+    --type-body-xl-line: 24px;
+    --type-body-md-size: 14px;
+    --type-body-md-line: 20px;
+    --type-chip-size: 10px;
+    --type-chip-line: 16px;
+  }
+}
