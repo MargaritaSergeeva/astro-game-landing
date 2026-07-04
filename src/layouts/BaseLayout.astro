@@ -1,0 +1,37 @@
+---
+import { defaultLocale, localeMeta, supportedLocales, type Locale } from '../i18n/config';
+import '../styles/tokens.css';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+}
+
+const { locale, title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <title>{title}</title>
+    {
+      supportedLocales.map((alternateLocale) => (
+        <link
+          rel="alternate"
+          hreflang={alternateLocale}
+          href={`/${alternateLocale}/`}
+          title={localeMeta[alternateLocale].label}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={`/${defaultLocale}/`} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

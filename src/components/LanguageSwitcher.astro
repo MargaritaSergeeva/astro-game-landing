@@ -1,0 +1,46 @@
+---
+import { getLocalizedPath, localeMeta, supportedLocales, type Locale } from '../i18n/config';
+
+interface Props {
+  currentLocale: Locale;
+  label: string;
+  currentSection?: string;
+}
+
+const { currentLocale, label, currentSection } = Astro.props;
+---
+
+<nav class="language-switcher" aria-label={label}>
+  <ul class="language-switcher__list">
+    {
+      supportedLocales.map((locale) => (
+        <li class="language-switcher__item">
+          <a
+            class="language-switcher__link"
+            href={getLocalizedPath(locale, currentSection)}
+            lang={locale}
+            hreflang={locale}
+            aria-current={locale === currentLocale ? 'page' : undefined}
+            data-language-link
+            data-base-path={getLocalizedPath(locale)}
+          >
+            <span aria-hidden="true">{localeMeta[locale].shortLabel}</span>
+            <span class="language-switcher__label">{localeMeta[locale].label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  const updateLanguageLinks = () => {
+    document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach((link) => {
+      const basePath = link.dataset.basePath;
+      if (basePath) link.href = `${basePath}${window.location.hash}`;
+    });
+  };
+
+  updateLanguageLinks();
+  window.addEventListener('hashchange', updateLanguageLinks);
+</script>
