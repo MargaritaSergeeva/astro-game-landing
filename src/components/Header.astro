@@ -119,6 +119,7 @@ const navigation = [
       currentLocale={locale}
       label={translation.common.languageSwitcherLabel}
       currentSection="home"
+      openUpward
     />
   </div>
 </div>
@@ -295,7 +296,7 @@ const navigation = [
     position: fixed;
     inset: 0;
     z-index: 100;
-    display: flex;
+    display: none;
     flex-direction: column;
     min-width: 360px;
     padding: 132px 16px 28px;
@@ -408,6 +409,10 @@ const navigation = [
       height: 56px;
       background: var(--color-control);
       border-radius: 50%;
+    }
+
+    .mobile-menu:not([hidden]) {
+      display: flex;
     }
   }
 </style>

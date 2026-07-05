@@ -18,7 +18,9 @@ const { translation } = Astro.props;
       <h1 class="hero__title" id="hero-title">
         <span>TWILIGHT</span><span>HAVEN</span>
       </h1>
-      <p class="hero__lead">{translation.home.intro[0]}</p>
+      <div class="hero__intro">
+        {translation.home.intro.map((paragraph) => <p class="hero__lead">{paragraph}</p>)}
+      </div>
       <a class="hero__cta" href="#games" data-section-link data-slide-index="1">
         <span>{translation.home.gamesCta}</span>
         <span aria-hidden="true">→</span>
@@ -39,20 +41,22 @@ const { translation } = Astro.props;
   .hero {
     position: relative;
     min-height: 100dvh;
-    overflow: hidden;
+    overflow: hidden auto;
   }
 
   .hero__inner {
     position: relative;
+    display: flex;
     height: 100%;
     min-height: 100dvh;
+    padding-top: var(--header-height);
   }
 
   .hero__content {
     position: relative;
     z-index: 2;
     width: min(52vw, 900px);
-    padding-top: clamp(280px, 35vh, 370px);
+    margin-block: auto;
   }
 
   .hero__eyebrow {
@@ -86,10 +90,15 @@ const { translation } = Astro.props;
     color: var(--color-accent);
   }
 
-  .hero__lead {
+  .hero__intro {
+    display: grid;
+    gap: 16px;
     max-width: 900px;
     margin-top: 34px;
-    font-size: clamp(24px, 1.7vw, var(--type-lead-size));
+  }
+
+  .hero__lead {
+    font-size: var(--type-eyebrow-size);
     font-weight: var(--font-weight-light);
     line-height: 1.4;
     color: var(--color-text-muted);
@@ -138,13 +147,23 @@ const { translation } = Astro.props;
     color: var(--color-text-muted);
   }
 
+  @media (width <= 1024px) {
+    .hero__copyright {
+      bottom: 26px;
+    }
+  }
+
   @media (width <= 767px) {
     .hero {
       min-height: 590px;
     }
 
     .hero__inner {
+      display: block;
+      height: auto;
       min-height: 590px;
+      padding-top: 0;
+      padding-bottom: 32px;
     }
 
     .hero__inner::after {
@@ -159,6 +178,7 @@ const { translation } = Astro.props;
     .hero__content {
       width: 100%;
       padding-top: 316px;
+      margin-block: 0;
     }
 
     .hero__eyebrow {
@@ -179,9 +199,12 @@ const { translation } = Astro.props;
       white-space: nowrap;
     }
 
-    .hero__lead {
-      max-width: 328px;
+    .hero__intro {
+      gap: 12px;
       margin-top: 20px;
+    }
+
+    .hero__lead {
       font-size: 16px;
       line-height: 24px;
     }

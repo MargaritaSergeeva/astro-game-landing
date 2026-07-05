@@ -5,12 +5,13 @@ interface Props {
   currentLocale: Locale;
   label: string;
   currentSection?: string;
+  openUpward?: boolean;
 }
 
-const { currentLocale, label, currentSection } = Astro.props;
+const { currentLocale, label, currentSection, openUpward = false } = Astro.props;
 ---
 
-<details class="language-switcher">
+<details class:list={['language-switcher', { 'language-switcher--up': openUpward }]}>
   <summary class="language-switcher__trigger" aria-label={label}>
     <span>{localeMeta[currentLocale].shortLabel}</span>
     <span class="language-switcher__chevron" aria-hidden="true"></span>
@@ -112,6 +113,11 @@ const { currentLocale, label, currentSection } = Astro.props;
     border: 1px solid var(--color-border-muted);
     border-radius: 8px;
     box-shadow: var(--shadow-soft);
+  }
+
+  .language-switcher--up .language-switcher__menu {
+    top: auto;
+    bottom: calc(100% + 8px);
   }
 
   .language-switcher__link {
