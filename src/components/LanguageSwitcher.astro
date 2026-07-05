@@ -45,16 +45,6 @@ const { currentLocale, label, currentSection, openUpward = false } = Astro.props
     ...document.querySelectorAll<HTMLDetailsElement>('.language-switcher'),
   ];
 
-  const updateLanguageLinks = () => {
-    document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach((link) => {
-      const basePath = link.dataset.basePath;
-      if (basePath) link.href = `${basePath}${window.location.hash}`;
-    });
-  };
-
-  updateLanguageLinks();
-  window.addEventListener('hashchange', updateLanguageLinks);
-
   document.addEventListener('pointerdown', (event) => {
     languageSwitchers.forEach((switcher) => {
       if (switcher.open && !switcher.contains(event.target as Node)) switcher.open = false;
