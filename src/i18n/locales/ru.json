@@ -43,7 +43,7 @@
     "genresLabel": "Жанры",
     "genres": ["Симулятор", "Приключение", "Исследование", "Narrative"],
     "trailerCta": "Смотреть трейлер",
-    "steamCta": "Открыть в Steam"
+    "steamCta": "Страница в Steam"
   },
   "about": {
     "index": "03",

@@ -88,11 +88,13 @@ const structuredData = [
   let mainSlider: Swiper | undefined;
   let suppressHistory = false;
   let wheelDelta = 0;
-  let wheelLocked = false;
-  let wheelUnlockTimer: number | undefined;
+  let wheelGestureActive = false;
+  let wheelGestureHandled = false;
+  let wheelGestureScrollElement: HTMLElement | null = null;
+  let wheelGestureEndTimer: number | undefined;
   let lastWheelEventAt = 0;
-  const wheelThreshold = 64;
-  const wheelGesturePause = 280;
+  const wheelThreshold = 12;
+  const wheelGestureEndDelay = 60;
 
   const getHashIndex = () => {
     const id = window.location.hash.replace('#', '');
@@ -101,10 +103,15 @@ const structuredData = [
   };
 
   const setActiveNavigation = (index: number) => {
+    const activeSection = sectionIds[index] ?? sectionIds[0];
     sectionLinks.forEach((link) => {
       const isActive = Number(link.dataset.slideIndex) === index;
       if (isActive) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
+    });
+    document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach((link) => {
+      const basePath = link.dataset.basePath;
+      if (basePath) link.href = `${basePath}#${activeSection}`;
     });
   };
 
@@ -139,6 +146,20 @@ const structuredData = [
     return null;
   };
 
+  const finishWheelGesture = () => {
+    wheelGestureActive = false;
+    wheelGestureHandled = false;
+    wheelGestureScrollElement = null;
+    wheelDelta = 0;
+    lastWheelEventAt = 0;
+    wheelGestureEndTimer = undefined;
+  };
+
+  const scheduleWheelGestureEnd = () => {
+    if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
+    wheelGestureEndTimer = window.setTimeout(finishWheelGesture, wheelGestureEndDelay);
+  };
+
   const handleDesktopWheel = (event: WheelEvent) => {
     if (!mainSlider || !desktopQuery.matches || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
       return;
@@ -153,15 +174,27 @@ const structuredData = [
           ? event.deltaY * activeSlide.clientHeight
           : event.deltaY;
     event.preventDefault();
-    if (wheelLocked || mainSlider.animating) {
-      lastWheelEventAt = Date.now();
-      if (wheelUnlockTimer) window.clearTimeout(wheelUnlockTimer);
-      wheelUnlockTimer = window.setTimeout(unlockWheelAfterGesture, wheelGesturePause);
+
+    const now = Date.now();
+    if (!wheelGestureActive || now - lastWheelEventAt > wheelGestureEndDelay) {
+      if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
+      wheelGestureActive = true;
+      wheelGestureHandled = false;
+      wheelGestureScrollElement = null;
+      wheelDelta = 0;
+    }
+    lastWheelEventAt = now;
+    scheduleWheelGestureEnd();
+
+    if (wheelGestureScrollElement) {
+      wheelGestureScrollElement.scrollBy({ top: normalizedDelta });
       return;
     }
+    if (wheelGestureHandled) return;
 
     const scrollableElement = findScrollableElement(event.target, activeSlide, normalizedDelta);
     if (scrollableElement) {
+      wheelGestureScrollElement = scrollableElement;
       scrollableElement.scrollBy({ top: normalizedDelta });
       wheelDelta = 0;
       return;
@@ -173,10 +206,9 @@ const structuredData = [
 
     const shouldMoveNext = wheelDelta > 0;
     wheelDelta = 0;
+    wheelGestureHandled = true;
     if ((shouldMoveNext && mainSlider.isEnd) || (!shouldMoveNext && mainSlider.isBeginning)) return;
 
-    wheelLocked = true;
-    lastWheelEventAt = Date.now();
     const destinationIndex = mainSlider.activeIndex + (shouldMoveNext ? 1 : -1);
     const destinationSlide = mainSlider.slides[destinationIndex] as HTMLElement | undefined;
     if (destinationSlide) {
@@ -186,21 +218,7 @@ const structuredData = [
     }
     if (shouldMoveNext) mainSlider.slideNext();
     else mainSlider.slidePrev();
-    wheelUnlockTimer = window.setTimeout(unlockWheelAfterGesture, wheelGesturePause);
   };
-
-  function unlockWheelAfterGesture() {
-    const timeSinceLastWheel = Date.now() - lastWheelEventAt;
-    if (mainSlider?.animating || timeSinceLastWheel < wheelGesturePause) {
-      wheelUnlockTimer = window.setTimeout(
-        unlockWheelAfterGesture,
-        Math.max(50, wheelGesturePause - timeSinceLastWheel),
-      );
-      return;
-    }
-    wheelLocked = false;
-    wheelUnlockTimer = undefined;
-  }
 
   const initializeSlider = () => {
     if (!desktopQuery.matches || !sliderElement || mainSlider) return;
@@ -235,10 +253,8 @@ const structuredData = [
     window.removeEventListener('wheel', handleDesktopWheel);
     mainSlider.destroy(true, true);
     mainSlider = undefined;
-    wheelDelta = 0;
-    wheelLocked = false;
-    if (wheelUnlockTimer) window.clearTimeout(wheelUnlockTimer);
-    wheelUnlockTimer = undefined;
+    if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
+    finishWheelGesture();
   };
 
   const updateMode = () => {

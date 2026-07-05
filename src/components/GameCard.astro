@@ -68,6 +68,7 @@ const { translation } = Astro.props;
   .game-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 32px;
     min-height: 0;
     background: var(--color-panel);
     border: 1px solid var(--color-border-muted);
@@ -119,7 +120,7 @@ const { translation } = Astro.props;
     flex-direction: column;
     justify-content: center;
     min-width: 0;
-    padding: clamp(40px, 4.5vw, 88px);
+    padding: 56px;
   }
 
   .game-card__genres {
@@ -163,7 +164,7 @@ const { translation } = Astro.props;
     display: grid;
     gap: 24px;
     margin-top: 32px;
-    font-size: clamp(16px, 1.25vw, 24px);
+    font-size: var(--type-eyebrow-size);
     line-height: 1.35;
     color: var(--color-text-muted);
   }
@@ -187,11 +188,32 @@ const { translation } = Astro.props;
     cursor: pointer;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-control);
+    transition:
+      background-color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard);
   }
 
   .game-card__button--steam {
-    background: var(--color-accent-dark);
+    background: var(--color-accent);
     border-color: var(--color-accent);
+  }
+
+  .game-card__button--steam:hover,
+  .game-card__button--steam:focus-visible {
+    background: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
+  }
+
+  @media (768px <= width <= 1599px) {
+    .game-card__actions {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .game-card__button {
+      width: 100%;
+      min-width: 0;
+    }
   }
 
   @media (width <= 767px) {
@@ -226,7 +248,7 @@ const { translation } = Astro.props;
     }
 
     .game-card__content {
-      padding: 16px;
+      padding: 16px 10px;
     }
 
     .game-card__genres {
