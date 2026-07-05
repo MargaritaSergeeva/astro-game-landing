@@ -1,0 +1,381 @@
+---
+import slide01 from '../assets/slider/slide-01.webp';
+import slide02 from '../assets/slider/slide-02.webp';
+import slide03 from '../assets/slider/slide-03.webp';
+import slide04 from '../assets/slider/slide-04.webp';
+import slide05 from '../assets/slider/slide-05.webp';
+import slide06 from '../assets/slider/slide-06.webp';
+import slide07 from '../assets/slider/slide-07.webp';
+import slide08 from '../assets/slider/slide-08.webp';
+import slide09 from '../assets/slider/slide-09.webp';
+import { siteConfig } from '../config/site';
+import type { Translations } from '../i18n/loader';
+import SectionMarker from './SectionMarker.astro';
+
+interface Props {
+  translation: Translations;
+}
+
+const { translation } = Astro.props;
+const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, slide08, slide09];
+---
+
+<section
+  class="about-section swiper-slide"
+  id="about"
+  data-section="about"
+  aria-labelledby="about-title"
+>
+  <div class="about-section__inner container">
+    <SectionMarker index={translation.about.index} title={translation.about.title} />
+    <div class="about-section__layout">
+      <div class="about-section__content">
+        <h2 id="about-title">
+          <span>{translation.about.displayTitle}</span>
+          <span class="about-section__title-accent">{translation.about.displayTitleAccent}</span>
+        </h2>
+        <div class="about-section__copy">
+          {translation.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+        <div class="about-section__metrics">
+          <div>
+            <strong>{siteConfig.foundedYear}</strong>
+            <span>{translation.about.foundedLabel}</span>
+          </div>
+          <div>
+            <strong>{translation.about.teamValue}</strong>
+            <span>{translation.about.teamLabel}</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="about-gallery swiper"
+        data-gallery-slider
+        tabindex="0"
+        aria-label={translation.about.galleryLabel}
+      >
+        <div class="about-gallery__wrapper swiper-wrapper">
+          {
+            slides.map((slide, index) => (
+              <div class="about-gallery__slide swiper-slide">
+                <img
+                  src={slide.src}
+                  alt={translation.media.galleryAlt[index]}
+                  width="800"
+                  height="450"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                />
+              </div>
+            ))
+          }
+        </div>
+        <span class="about-gallery__corner about-gallery__corner--top-left" aria-hidden="true"
+        ></span>
+        <span class="about-gallery__corner about-gallery__corner--top-right" aria-hidden="true"
+        ></span>
+        <span class="about-gallery__corner about-gallery__corner--bottom-left" aria-hidden="true"
+        ></span>
+        <span class="about-gallery__corner about-gallery__corner--bottom-right" aria-hidden="true"
+        ></span>
+        <div class="about-gallery__pagination" data-gallery-pagination></div>
+        <p class="about-gallery__counter" aria-live="polite" data-gallery-counter>01 / 09</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { A11y, Keyboard, Pagination } from 'swiper/modules';
+  import { Swiper } from 'swiper';
+
+  const galleryElement = document.querySelector<HTMLElement>('[data-gallery-slider]');
+  const galleryCounter = document.querySelector<HTMLElement>('[data-gallery-counter]');
+
+  if (galleryElement) {
+    const gallery = new Swiper(galleryElement, {
+      modules: [A11y, Keyboard, Pagination],
+      a11y: { enabled: true },
+      keyboard: { enabled: true, onlyInViewport: true },
+      loop: false,
+      speed: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300,
+      pagination: {
+        el: '[data-gallery-pagination]',
+        clickable: true,
+      },
+      on: {
+        slideChange(swiper) {
+          if (galleryCounter) {
+            galleryCounter.textContent = `${String(swiper.activeIndex + 1).padStart(2, '0')} / ${String(swiper.slides.length).padStart(2, '0')}`;
+          }
+        },
+      },
+    });
+
+    galleryElement.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        event.stopPropagation();
+        gallery.slideNext();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        event.stopPropagation();
+        gallery.slidePrev();
+      }
+    });
+    void gallery;
+  }
+</script>
+
+<style>
+  .about-section {
+    min-height: 100dvh;
+    padding-block: 140px 72px;
+    overflow-y: auto;
+    scroll-margin-top: 84px;
+  }
+
+  .about-section__inner {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 46px;
+    min-height: calc(100dvh - 212px);
+  }
+
+  .about-section__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    min-height: 0;
+  }
+
+  .about-section__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-right: clamp(20px, 3vw, 64px);
+  }
+
+  .about-section h2 {
+    display: grid;
+    font-family: var(--font-display);
+    font-size: clamp(48px, 3.4vw, 64px);
+    font-weight: var(--font-weight-heavy);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .about-section__title-accent {
+    color: var(--color-accent);
+  }
+
+  .about-section__copy {
+    display: grid;
+    gap: 18px;
+    max-height: 260px;
+    padding-right: 16px;
+    margin-top: 40px;
+    overflow-y: auto;
+    font-size: clamp(15px, 1.1vw, 20px);
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    scrollbar-color: var(--color-accent) transparent;
+  }
+
+  .about-section__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding-top: 42px;
+    margin-top: 42px;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .about-section__metrics div {
+    display: grid;
+    gap: 14px;
+  }
+
+  .about-section__metrics strong {
+    font-size: clamp(64px, 4.6vw, var(--type-stat-size));
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    color: var(--color-accent);
+  }
+
+  .about-section__metrics span {
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--color-text-muted);
+  }
+
+  .about-gallery {
+    position: relative;
+    align-self: center;
+    width: 100%;
+    max-height: 742px;
+    aspect-ratio: 864 / 742;
+    border: 1px solid var(--color-border-muted);
+  }
+
+  .about-gallery__wrapper,
+  .about-gallery__slide {
+    height: 100%;
+  }
+
+  .about-gallery__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-gallery__corner {
+    position: absolute;
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    pointer-events: none;
+  }
+
+  .about-gallery__corner--top-left {
+    top: 30px;
+    left: 30px;
+    border-top: 2px solid var(--color-accent);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__corner--top-right {
+    top: 30px;
+    right: 30px;
+    border-top: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__corner--bottom-left {
+    bottom: 30px;
+    left: 30px;
+    border-bottom: 2px solid var(--color-accent);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__corner--bottom-right {
+    right: 30px;
+    bottom: 30px;
+    border-right: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__pagination {
+    position: absolute;
+    right: 0;
+    bottom: -48px;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .about-gallery__counter {
+    display: none;
+  }
+
+  @media (width <= 767px) {
+    .about-section {
+      min-height: 0;
+      padding-block: 24px 48px;
+      overflow: visible;
+    }
+
+    .about-section__inner {
+      display: block;
+      min-height: 0;
+    }
+
+    .about-section__layout {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .about-section__content {
+      display: block;
+      padding-right: 0;
+    }
+
+    .about-section h2 {
+      font-size: 32px;
+    }
+
+    .about-section__copy {
+      gap: 18px;
+      max-height: none;
+      padding-right: 0;
+      margin-top: 20px;
+      overflow: visible;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .about-section__metrics {
+      padding-top: 30px;
+      margin-top: 30px;
+    }
+
+    .about-section__metrics strong {
+      font-size: 32px;
+      line-height: 44px;
+    }
+
+    .about-section__metrics span {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .about-gallery {
+      aspect-ratio: 16 / 10;
+    }
+
+    .about-gallery__corner {
+      width: 32px;
+      height: 32px;
+    }
+
+    .about-gallery__corner--top-left {
+      top: 10px;
+      left: 10px;
+    }
+
+    .about-gallery__corner--top-right {
+      top: 10px;
+      right: 10px;
+    }
+
+    .about-gallery__corner--bottom-left {
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .about-gallery__corner--bottom-right {
+      right: 10px;
+      bottom: 10px;
+    }
+
+    .about-gallery__pagination {
+      display: none;
+    }
+
+    .about-gallery__counter {
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      z-index: 3;
+      display: block;
+      padding: 4px 8px;
+      font-size: 12px;
+      line-height: 16px;
+      background: rgb(15 15 15 / 70%);
+    }
+  }
+</style>
