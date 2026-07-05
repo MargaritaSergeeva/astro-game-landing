@@ -1,0 +1,46 @@
+---
+interface Props {
+  index: string;
+  title: string;
+}
+
+const { index, title } = Astro.props;
+---
+
+<div class="section-marker" aria-hidden="true">
+  <span>{index}</span>
+  <span class="section-marker__dash"></span>
+  <span class="section-marker__title">{title}</span>
+  <span class="section-marker__line"></span>
+</div>
+
+<style>
+  .section-marker {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: var(--type-nav-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--type-nav-line);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .section-marker__dash {
+    width: 20px;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .section-marker__line {
+    flex: 1;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  @media (width <= 767px) {
+    .section-marker {
+      gap: 14px;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+</style>

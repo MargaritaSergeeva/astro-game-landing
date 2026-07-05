@@ -10,30 +10,40 @@ interface Props {
 const { currentLocale, label, currentSection } = Astro.props;
 ---
 
-<nav class="language-switcher" aria-label={label}>
-  <ul class="language-switcher__list">
-    {
-      supportedLocales.map((locale) => (
-        <li class="language-switcher__item">
-          <a
-            class="language-switcher__link"
-            href={getLocalizedPath(locale, currentSection)}
-            lang={locale}
-            hreflang={locale}
-            aria-current={locale === currentLocale ? 'page' : undefined}
-            data-language-link
-            data-base-path={getLocalizedPath(locale)}
-          >
-            <span aria-hidden="true">{localeMeta[locale].shortLabel}</span>
-            <span class="language-switcher__label">{localeMeta[locale].label}</span>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-</nav>
+<details class="language-switcher">
+  <summary class="language-switcher__trigger" aria-label={label}>
+    <span>{localeMeta[currentLocale].shortLabel}</span>
+    <span class="language-switcher__chevron" aria-hidden="true"></span>
+  </summary>
+  <nav class="language-switcher__menu" aria-label={label}>
+    <ul class="language-switcher__list">
+      {
+        supportedLocales.map((locale) => (
+          <li class="language-switcher__item">
+            <a
+              class="language-switcher__link"
+              href={getLocalizedPath(locale, currentSection)}
+              lang={locale}
+              hreflang={locale}
+              aria-current={locale === currentLocale ? 'page' : undefined}
+              data-language-link
+              data-base-path={getLocalizedPath(locale)}
+            >
+              <span>{localeMeta[locale].shortLabel}</span>
+              <span class="language-switcher__label">{localeMeta[locale].label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</details>
 
 <script>
+  const languageSwitchers = [
+    ...document.querySelectorAll<HTMLDetailsElement>('.language-switcher'),
+  ];
+
   const updateLanguageLinks = () => {
     document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach((link) => {
       const basePath = link.dataset.basePath;
@@ -43,4 +53,81 @@ const { currentLocale, label, currentSection } = Astro.props;
 
   updateLanguageLinks();
   window.addEventListener('hashchange', updateLanguageLinks);
+
+  document.addEventListener('pointerdown', (event) => {
+    languageSwitchers.forEach((switcher) => {
+      if (switcher.open && !switcher.contains(event.target as Node)) switcher.open = false;
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    languageSwitchers.forEach((switcher) => {
+      if (switcher.open) switcher.open = false;
+    });
+  });
 </script>
+
+<style>
+  .language-switcher {
+    position: relative;
+  }
+
+  .language-switcher__trigger {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    min-width: 64px;
+    min-height: 44px;
+    font-size: 16px;
+    list-style: none;
+  }
+
+  .language-switcher__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .language-switcher__chevron {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid currentcolor;
+    border-bottom: 2px solid currentcolor;
+    transform: rotate(45deg) translateY(-3px);
+    transition: transform var(--motion-fast) var(--ease-standard);
+  }
+
+  .language-switcher[open] .language-switcher__chevron {
+    transform: rotate(225deg) translate(-2px, -2px);
+  }
+
+  .language-switcher__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 10;
+    width: 168px;
+    padding: 8px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 8px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .language-switcher__link {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 12px;
+    color: var(--color-text-muted);
+    border-radius: 4px;
+  }
+
+  .language-switcher__link:hover,
+  .language-switcher__link:focus-visible,
+  .language-switcher__link[aria-current='page'] {
+    color: var(--color-text);
+    background: var(--color-control);
+  }
+</style>

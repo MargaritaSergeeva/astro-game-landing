@@ -1,37 +1,109 @@
 ---
+import backgroundDesktop from '../assets/images/background.webp';
+import backgroundMobile from '../assets/images/background-mobile.webp';
 import { defaultLocale, localeMeta, supportedLocales, type Locale } from '../i18n/config';
-import '../styles/tokens.css';
+import '../styles/global.css';
 
 interface Props {
   locale: Locale;
   title: string;
   description: string;
+  structuredData?: Record<string, unknown>[];
+  skipLabel?: string;
+  ogImage?: string | URL;
+  ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  noindex?: boolean;
 }
 
-const { locale, title, description } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  structuredData = [],
+  skipLabel = 'Skip to content',
+  ogImage,
+  ogImageAlt,
+  ogImageWidth,
+  ogImageHeight,
+  noindex = false,
+} = Astro.props;
+const canonicalUrl = new URL(`/${locale}/`, Astro.site ?? Astro.url.origin);
+const localeMap: Record<Locale, string> = {
+  en: 'en_US',
+  ru: 'ru_RU',
+  ja: 'ja_JP',
+};
 ---
 
 <!doctype html>
 <html lang={locale}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f0f0f" />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+    />
     <title>{title}</title>
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
     {
-      supportedLocales.map((alternateLocale) => (
+      !noindex &&
+        supportedLocales.map((alternateLocale) => (
+          <link
+            rel="alternate"
+            hreflang={alternateLocale}
+            href={new URL(`/${alternateLocale}/`, canonicalUrl)}
+            title={localeMeta[alternateLocale].label}
+          />
+        ))
+    }
+    {
+      !noindex && (
         <link
           rel="alternate"
-          hreflang={alternateLocale}
-          href={`/${alternateLocale}/`}
-          title={localeMeta[alternateLocale].label}
+          hreflang="x-default"
+          href={new URL(`/${defaultLocale}/`, canonicalUrl)}
         />
+      )
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TWILIGHTHAVEN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:locale" content={localeMap[locale]} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
+    {ogImageWidth && <meta property="og:image:width" content={String(ogImageWidth)} />}
+    {ogImageHeight && <meta property="og:image:height" content={String(ogImageHeight)} />}
+    {
+      supportedLocales
+        .filter((alternateLocale) => alternateLocale !== locale)
+        .map((alternateLocale) => (
+          <meta property="og:locale:alternate" content={localeMap[alternateLocale]} />
+        ))
+    }
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {
+      structuredData.map((item) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />
       ))
     }
-    <link rel="alternate" hreflang="x-default" href={`/${defaultLocale}/`} />
   </head>
-  <body>
+  <body
+    style={`--body-background-desktop: url("${backgroundDesktop.src}"); --body-background-mobile: url("${backgroundMobile.src}");`}
+  >
+    <a class="skip-link" href="#home">{skipLabel}</a>
     <slot />
   </body>
 </html>

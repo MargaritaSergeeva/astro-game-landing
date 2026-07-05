@@ -12,6 +12,7 @@
   },
   "common": {
     "languageSwitcherLabel": "Choose language",
+    "skipToContent": "Skip to content",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "previousSlide": "Previous slide",
@@ -47,15 +48,18 @@
   "about": {
     "index": "03",
     "title": "About Us",
+    "displayTitle": "WE CREATE",
+    "displayTitleAccent": "GAMES",
     "paragraphs": [
-      "TWILIGHTHAVEN is an independent game studio with five developers, united by a shared vision of creating an original game universe.",
+      "TWILIGHTHAVEN is an independent game studio with a team of more than nine people, united by a shared vision of creating an original game universe.",
       "Our games take place in a world forever changed by a global Cataclysm. A dark neo-cyberpunk future where powerful corporations compete for control, and advanced technology exists alongside inexplicable anomalies.",
       "We believe memorable worlds are built on more than gameplay alone. Every character, document, legend, and hidden story helps bring the setting to life, rewarding players who choose to dig deeper.",
       "INFOGRIND is only the beginning. As the universe grows, future games will explore new regions, introduce new factions, and reveal more of its history, mysteries, and lore.",
       "Our goal is to create immersive worlds and compelling stories that players will want to revisit long after they've finished playing."
     ],
-    "teamLabel": "Developers",
-    "teamValue": "5",
+    "teamLabel": "People on the team",
+    "teamValue": "9+",
+    "foundedLabel": "Founded",
     "galleryLabel": "INFOGRIND gallery"
   },
   "contact": {

@@ -1,0 +1,206 @@
+---
+import robotMobile from '../assets/images/robot-mobile.webp';
+import robot from '../assets/images/robot.webp';
+import type { Translations } from '../i18n/loader';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  translation: Translations;
+}
+
+const { translation } = Astro.props;
+---
+
+<section class="hero swiper-slide" id="home" data-section="home" aria-labelledby="hero-title">
+  <div class="hero__inner container">
+    <div class="hero__content">
+      <p class="hero__eyebrow"><span aria-hidden="true"></span>{translation.home.eyebrow}</p>
+      <h1 class="hero__title" id="hero-title">
+        <span>TWILIGHT</span><span>HAVEN</span>
+      </h1>
+      <p class="hero__lead">{translation.home.intro[0]}</p>
+      <a class="hero__cta" href="#games" data-section-link data-slide-index="1">
+        <span>{translation.home.gamesCta}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <picture class="hero__visual" aria-hidden="true">
+      <source media="(max-width: 767px)" srcset={robotMobile.src} />
+      <img src={robot.src} alt="" width="807" height="1024" fetchpriority="high" />
+    </picture>
+
+    <SocialLinks expandable class="hero__socials" />
+    <p class="hero__copyright">© 2026 TWILIGHTHAVEN</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    position: relative;
+    height: 100%;
+    min-height: 100dvh;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    width: min(52vw, 900px);
+    padding-top: clamp(280px, 35vh, 370px);
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: var(--type-eyebrow-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--type-eyebrow-line);
+    color: var(--color-accent);
+    text-transform: uppercase;
+  }
+
+  .hero__eyebrow span {
+    width: 8px;
+    height: 8px;
+    background: var(--color-text-muted);
+    border-radius: 50%;
+  }
+
+  .hero__title {
+    margin-top: 42px;
+    font-family: var(--font-display);
+    font-size: clamp(64px, 4.7vw, var(--type-hero-size));
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--type-hero-line);
+    white-space: nowrap;
+  }
+
+  .hero__title span:last-child {
+    color: var(--color-accent);
+  }
+
+  .hero__lead {
+    max-width: 900px;
+    margin-top: 34px;
+    font-size: clamp(24px, 1.7vw, var(--type-lead-size));
+    font-weight: var(--font-weight-light);
+    line-height: 1.4;
+    color: var(--color-text-muted);
+  }
+
+  .hero__cta {
+    display: inline-flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    min-width: 208px;
+    height: 56px;
+    padding-inline: 28px;
+    margin-top: 56px;
+    font-size: 20px;
+    line-height: 28px;
+    background: var(--color-accent);
+    border-radius: var(--radius-control);
+    transition: background-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .hero__cta:hover,
+  .hero__cta:focus-visible {
+    background: var(--color-accent-dark);
+  }
+
+  .hero__visual {
+    position: absolute;
+    right: 5%;
+    bottom: 0;
+    z-index: 1;
+    width: min(42vw, 807px);
+  }
+
+  .hero__visual img {
+    width: 100%;
+    height: auto;
+  }
+
+  .hero__copyright {
+    position: absolute;
+    bottom: 76px;
+    left: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-text-muted);
+  }
+
+  @media (width <= 767px) {
+    .hero {
+      min-height: 590px;
+    }
+
+    .hero__inner {
+      min-height: 590px;
+    }
+
+    .hero__inner::after {
+      position: absolute;
+      inset: 200px calc((100vw - 100%) / -2) 0;
+      z-index: 1;
+      pointer-events: none;
+      content: '';
+      background: linear-gradient(180deg, rgb(15 15 15 / 0%) 0%, var(--color-background) 62%);
+    }
+
+    .hero__content {
+      width: 100%;
+      padding-top: 316px;
+    }
+
+    .hero__eyebrow {
+      display: block;
+      font-size: 14px;
+      font-weight: var(--font-weight-light);
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .hero__eyebrow span {
+      display: none;
+    }
+
+    .hero__title {
+      margin-top: 14px;
+      font-size: clamp(32px, 10vw, 36px);
+      white-space: nowrap;
+    }
+
+    .hero__lead {
+      max-width: 328px;
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .hero__cta {
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    .hero__visual {
+      top: 42px;
+      right: calc((100vw - 100%) / -2);
+      bottom: auto;
+      z-index: 0;
+      width: 214px;
+    }
+
+    .hero__copyright {
+      display: none;
+    }
+  }
+</style>
