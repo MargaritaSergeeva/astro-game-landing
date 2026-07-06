@@ -1,6 +1,7 @@
 ---
 import robotMobile from '../assets/images/robot-mobile.webp';
 import robot from '../assets/images/robot.webp';
+import { siteConfig } from '../config/site';
 import type { Translations } from '../i18n/loader';
 import SocialLinks from './SocialLinks.astro';
 
@@ -33,7 +34,7 @@ const { translation } = Astro.props;
     </picture>
 
     <SocialLinks expandable class="hero__socials" />
-    <p class="hero__copyright">© 2026 TWILIGHTHAVEN</p>
+    <p class="hero__copyright">© {siteConfig.currentYear} TWILIGHTHAVEN</p>
   </div>
 </section>
 
