@@ -99,6 +99,7 @@ const localeMap: Record<Locale, string> = {
         <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />
       ))
     }
+    <slot name="head" />
   </head>
   <body
     style={`--body-background-desktop: url("${backgroundDesktop.src}"); --body-background-mobile: url("${backgroundMobile.src}");`}

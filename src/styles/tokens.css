@@ -93,6 +93,16 @@
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
+@media (width >= 1024px) {
+  :root {
+    --section-padding-top-fluid: clamp(104px, 13.012dvh, 140px);
+    --section-padding-bottom-fluid: clamp(28px, 6.691dvh, 72px);
+    --section-padding-bottom-large-fluid: clamp(32px, 7.435dvh, 80px);
+    --section-gap-fluid: clamp(24px, 4.275dvh, 46px);
+    --control-height-fluid: clamp(44px, 5.205dvh, 56px);
+  }
+}
+
 @media (width <= 767px) {
   :root {
     --type-hero-size: 36px;
