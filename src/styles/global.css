@@ -107,7 +107,7 @@ p {
 .contact-section__socials {
   position: relative;
   z-index: 2;
-  margin-top: clamp(24px, 5.948dvh, 64px);
+  margin-top: clamp(24px, 9dvh, 90px);
 }
 
 .about-gallery-shell .swiper-pagination-bullet {
@@ -178,6 +178,11 @@ body[data-menu-open='true'] {
   .main-slider__wrapper > .swiper-slide {
     width: auto;
   }
+
+  .contact-section__socials {
+    justify-content: center;
+    margin-top: 38px;
+  }
 }
 
 @media (width <= 767px) {
@@ -199,10 +204,5 @@ body[data-menu-open='true'] {
 
   .contact-section .section-marker {
     margin-bottom: 38px;
-  }
-
-  .contact-section__socials {
-    justify-content: center;
-    margin-top: 38px;
   }
 }

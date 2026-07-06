@@ -32,14 +32,27 @@ const { translation } = Astro.props;
         <a href={`mailto:${siteConfig.ceoEmail}`}>{siteConfig.ceoEmail}</a>
       </div>
 
+      <div class="contact-section__address">
+        <span>{translation.contact.addressLabel}</span>
+        <p>{translation.contact.addressPlaceholder}</p>
+      </div>
+
       <div class="contact-section__copy">
-        {translation.contact.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        <p>{translation.contact.introParagraph}</p>
+        <div class="contact-section__copy-followup">
+          <p>
+            {translation.contact.businessParagraph.before}<span
+              >{translation.contact.businessParagraph.accent}</span
+            >{translation.contact.businessParagraph.after}
+          </p>
+          <p>{translation.contact.ceoParagraph}</p>
+        </div>
       </div>
     </div>
 
     <footer class="contact-section__footer">
       <SocialLinks class="contact-section__socials" />
-      <p class="contact-section__copyright">© 2026 TWILIGHTHAVEN</p>
+      <p class="contact-section__copyright">© {siteConfig.currentYear} TWILIGHTHAVEN</p>
       <img class="contact-section__word" src={contactWord.src} alt="" aria-hidden="true" />
     </footer>
   </div>
@@ -70,25 +83,28 @@ const { translation } = Astro.props;
 
   .contact-section__details {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 2fr;
     gap: 32px;
     margin-top: clamp(36px, 8.178dvh, 88px);
   }
 
-  .contact-section__ceo {
+  .contact-section__ceo,
+  .contact-section__address {
     display: grid;
     gap: clamp(10px, 2.045dvh, 22px);
     align-content: start;
   }
 
   .contact-section__ceo span,
+  .contact-section__address span,
   .contact-section__copy {
     font-size: clamp(16px, min(1.25vw, 2.23dvh), 24px);
     line-height: 1.35;
     color: var(--color-text-muted);
   }
 
-  .contact-section__ceo a {
+  .contact-section__ceo a,
+  .contact-section__address p {
     font-size: clamp(18px, min(1.45vw, 2.602dvh), 28px);
     line-height: 1.35;
   }
@@ -98,8 +114,8 @@ const { translation } = Astro.props;
     gap: clamp(12px, 2.602dvh, 28px);
   }
 
-  .contact-section__copy p:nth-child(2) {
-    color: var(--color-text);
+  .contact-section__copy-followup span {
+    color: var(--color-accent);
   }
 
   .contact-section__copyright {
@@ -129,24 +145,36 @@ const { translation } = Astro.props;
       height: 100%;
       min-height: 0;
     }
+
+    .contact-section__word {
+      position: absolute;
+      right: 0;
+      bottom: -5px;
+      left: 0;
+      display: block;
+      width: min(100%, 163.569dvh);
+      height: auto;
+      margin-inline: auto;
+      pointer-events: none;
+      opacity: 0.9;
+    }
   }
 
-  @media (width <= 767px) {
+  @media (width <= 1023px) {
     .contact-section {
+      height: auto;
       min-height: 0;
-      padding-block: 24px 0;
+      padding-block: 112px 0;
       overflow: hidden;
     }
 
     .contact-section__inner {
       min-height: 0;
-      padding-bottom: 132px;
+      padding-bottom: 72px;
     }
 
     .contact-section__studio-email {
-      margin-top: 0;
-      font-size: 24px;
-      line-height: 32px;
+      margin-top: 32px;
     }
 
     .contact-section__details {
@@ -156,32 +184,16 @@ const { translation } = Astro.props;
       margin-top: 34px;
     }
 
-    .contact-section__ceo {
+    .contact-section__ceo,
+    .contact-section__address {
       gap: 10px;
-    }
-
-    .contact-section__ceo span,
-    .contact-section__copy {
-      font-size: 14px;
-      line-height: 20px;
-    }
-
-    .contact-section__ceo a {
-      font-size: 20px;
-      line-height: 28px;
     }
 
     .contact-section__copy {
       gap: 24px;
     }
 
-    .contact-section__copy p:nth-child(2) {
-      color: var(--color-text-muted);
-    }
-
     .contact-section__copyright {
-      position: relative;
-      z-index: 2;
       display: block;
       margin-top: 36px;
       font-size: 16px;
@@ -192,12 +204,38 @@ const { translation } = Astro.props;
 
     .contact-section__word {
       right: auto;
-      bottom: -22px;
+      bottom: -2px;
       left: 50%;
-      width: 540px;
-      max-width: none;
+      display: block;
+      width: 100vw;
+      max-width: 540px;
       margin-inline: 0;
       transform: translateX(-50%);
+    }
+  }
+
+  @media (width <= 767px) {
+    .contact-section {
+      padding-block: 24px 0;
+    }
+
+    .contact-section__studio-email {
+      margin-top: 0;
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .contact-section__ceo span,
+    .contact-section__address span,
+    .contact-section__copy {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .contact-section__ceo a,
+    .contact-section__address p {
+      font-size: 20px;
+      line-height: 28px;
     }
   }
 </style>

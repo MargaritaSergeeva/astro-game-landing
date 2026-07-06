@@ -65,13 +65,17 @@
   "contact": {
     "index": "04",
     "title": "Get in Touch",
-    "paragraphs": [
-      "We're always happy to hear from players, journalists, content creators, and potential partners.",
-      "For business inquiries, publishing opportunities, investment proposals, media requests, or other partnership opportunities, please contact us using the studio's business email.",
-      "If you'd like to reach the CEO directly, you can also use the personal contact address below."
-    ],
+    "introParagraph": "We're always happy to hear from players, journalists, content creators, and potential partners.",
+    "businessParagraph": {
+      "before": "For business inquiries, publishing opportunities, investment proposals, media requests, or other ",
+      "accent": "partnership opportunities, please contact us using the studio's business email",
+      "after": "."
+    },
+    "ceoParagraph": "If you'd like to reach the CEO directly, you can also use the personal contact address below.",
     "studioEmailLabel": "Studio Business Email",
     "ceoLabel": "CEO",
+    "addressLabel": "Address",
+    "addressPlaceholder": "1 Example Street, Shibuya, Tokyo 123-4567, Japan",
     "footerTagline": "We create games for players, build our own universe, and tell stories worth exploring."
   },
   "media": {
