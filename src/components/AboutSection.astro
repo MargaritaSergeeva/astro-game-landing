@@ -49,37 +49,39 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
         </div>
       </div>
 
-      <div
-        class="about-gallery swiper"
-        data-gallery-slider
-        tabindex="0"
-        aria-label={translation.about.galleryLabel}
-      >
-        <div class="about-gallery__wrapper swiper-wrapper">
-          {
-            slides.map((slide, index) => (
-              <div class="about-gallery__slide swiper-slide">
-                <img
-                  src={slide.src}
-                  alt={translation.media.galleryAlt[index]}
-                  width="800"
-                  height="450"
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                />
-              </div>
-            ))
-          }
+      <div class="about-gallery-shell">
+        <div
+          class="about-gallery swiper"
+          data-gallery-slider
+          tabindex="0"
+          aria-label={translation.about.galleryLabel}
+        >
+          <div class="about-gallery__wrapper swiper-wrapper">
+            {
+              slides.map((slide, index) => (
+                <div class="about-gallery__slide swiper-slide">
+                  <img
+                    src={slide.src}
+                    alt={translation.media.galleryAlt[index]}
+                    width="800"
+                    height="450"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              ))
+            }
+          </div>
+          <span class="about-gallery__corner about-gallery__corner--top-left" aria-hidden="true"
+          ></span>
+          <span class="about-gallery__corner about-gallery__corner--top-right" aria-hidden="true"
+          ></span>
+          <span class="about-gallery__corner about-gallery__corner--bottom-left" aria-hidden="true"
+          ></span>
+          <span class="about-gallery__corner about-gallery__corner--bottom-right" aria-hidden="true"
+          ></span>
+          <p class="about-gallery__counter" aria-live="polite" data-gallery-counter>01 / 09</p>
         </div>
-        <span class="about-gallery__corner about-gallery__corner--top-left" aria-hidden="true"
-        ></span>
-        <span class="about-gallery__corner about-gallery__corner--top-right" aria-hidden="true"
-        ></span>
-        <span class="about-gallery__corner about-gallery__corner--bottom-left" aria-hidden="true"
-        ></span>
-        <span class="about-gallery__corner about-gallery__corner--bottom-right" aria-hidden="true"
-        ></span>
         <div class="about-gallery__pagination" data-gallery-pagination></div>
-        <p class="about-gallery__counter" aria-live="polite" data-gallery-counter>01 / 09</p>
       </div>
     </div>
   </div>
@@ -90,6 +92,7 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
   import { Swiper } from 'swiper';
 
   const galleryElement = document.querySelector<HTMLElement>('[data-gallery-slider]');
+  const galleryPagination = document.querySelector<HTMLElement>('[data-gallery-pagination]');
   const galleryCounter = document.querySelector<HTMLElement>('[data-gallery-counter]');
 
   if (galleryElement) {
@@ -100,7 +103,7 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
       loop: false,
       speed: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300,
       pagination: {
-        el: '[data-gallery-pagination]',
+        el: galleryPagination,
         clickable: true,
       },
       on: {
@@ -131,7 +134,7 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
   .about-section {
     min-height: 100dvh;
     padding-block: 140px 72px;
-    overflow-y: auto;
+    overflow: hidden;
     scroll-margin-top: 84px;
   }
 
@@ -160,7 +163,7 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
   .about-section h2 {
     display: grid;
     font-family: var(--font-display);
-    font-size: clamp(48px, 3.4vw, 64px);
+    font-size: clamp(40px, min(3.4vw, 5.948dvh), 64px);
     font-weight: var(--font-weight-heavy);
     line-height: 1;
     text-transform: uppercase;
@@ -172,12 +175,14 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
 
   .about-section__copy {
     display: grid;
-    gap: 18px;
+    flex: 1 1 auto;
+    gap: clamp(10px, 1.673dvh, 18px);
+    min-height: 0;
     max-height: 260px;
     padding-right: 16px;
-    margin-top: 40px;
+    margin-top: clamp(18px, 3.717dvh, 40px);
     overflow-y: auto;
-    font-size: clamp(15px, 1.1vw, 20px);
+    font-size: clamp(14px, min(1.1vw, 1.859dvh), 20px);
     line-height: 1.4;
     color: var(--color-text-muted);
     scrollbar-color: var(--color-accent) transparent;
@@ -187,35 +192,46 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 32px;
-    padding-top: 42px;
-    margin-top: 42px;
+    padding-top: clamp(18px, 3.903dvh, 42px);
+    margin-top: clamp(18px, 3.903dvh, 42px);
     border-top: 1px solid var(--color-border-muted);
   }
 
   .about-section__metrics div {
     display: grid;
-    gap: 14px;
+    gap: clamp(8px, 1.301dvh, 14px);
   }
 
   .about-section__metrics strong {
-    font-size: clamp(64px, 4.6vw, var(--type-stat-size));
+    font-size: clamp(48px, min(4.6vw, 8.178dvh), var(--type-stat-size));
     font-weight: var(--font-weight-medium);
     line-height: 1;
     color: var(--color-accent);
   }
 
   .about-section__metrics span {
-    font-size: 20px;
+    font-size: clamp(16px, 1.859dvh, 20px);
     line-height: 28px;
     color: var(--color-text-muted);
   }
 
-  .about-gallery {
-    position: relative;
+  .about-gallery-shell {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(12px, 2.974dvh, 32px);
     align-self: center;
     width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .about-gallery {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
     max-height: 742px;
-    aspect-ratio: 864 / 742;
     border: 1px solid var(--color-border-muted);
   }
 
@@ -267,18 +283,74 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
   }
 
   .about-gallery__pagination {
-    position: absolute;
-    right: 0;
-    bottom: -48px;
-    left: 0;
-    z-index: 3;
     display: flex;
-    gap: 12px;
+    gap: 16px;
     justify-content: center;
+    min-height: 16px;
   }
 
   .about-gallery__counter {
     display: none;
+  }
+
+  @media (width >= 1024px) {
+    .about-section {
+      height: 100dvh;
+      min-height: 0;
+      padding-block: var(--section-padding-top-fluid) var(--section-padding-bottom-fluid);
+    }
+
+    .about-section__inner {
+      gap: var(--section-gap-fluid);
+      height: 100%;
+      min-height: 0;
+    }
+
+    .about-section__layout {
+      height: 100%;
+      min-height: 0;
+    }
+  }
+
+  @media (768px <= width <= 1023px) {
+    .about-section {
+      padding-block: 112px 48px;
+      overflow: visible;
+    }
+
+    .about-section__inner {
+      display: block;
+      min-height: 0;
+    }
+
+    .about-section__layout {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin-top: 32px;
+    }
+
+    .about-section__content {
+      display: block;
+      padding-right: 0;
+    }
+
+    .about-section__copy {
+      max-height: none;
+      padding-right: 0;
+      overflow: visible;
+    }
+
+    .about-gallery-shell {
+      display: grid;
+      grid-template-rows: auto auto;
+      height: auto;
+    }
+
+    .about-gallery {
+      height: auto;
+      aspect-ratio: 16 / 10;
+    }
   }
 
   @media (width <= 767px) {
@@ -334,7 +406,13 @@ const slides = [slide01, slide02, slide03, slide04, slide05, slide06, slide07, s
     }
 
     .about-gallery {
-      aspect-ratio: 16 / 10;
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+
+    .about-gallery-shell {
+      display: block;
+      height: auto;
     }
 
     .about-gallery__corner {

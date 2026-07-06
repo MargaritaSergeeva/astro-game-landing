@@ -65,8 +65,18 @@ const structuredData = [
   ogImageWidth={719}
   ogImageHeight={655}
 >
+  <Fragment slot="head">
+    <script is:inline>
+      (() => {
+        const sections = ['home', 'games', 'about', 'contacts'];
+        const section = window.location.hash.slice(1);
+        const index = Math.max(0, sections.indexOf(section));
+        document.documentElement.style.setProperty('--initial-slide-offset', `${index * -100}%`);
+      })();
+    </script>
+  </Fragment>
   <Header locale={locale} translation={translation} />
-  <main class="main-slider swiper" data-main-slider>
+  <main class="main-slider swiper swiper-vertical" data-main-slider>
     <div class="main-slider__wrapper swiper-wrapper">
       <Hero translation={translation} />
       <GamesSection translation={translation} />
@@ -312,6 +322,10 @@ const structuredData = [
   .main-slider,
   .main-slider__wrapper {
     width: 100%;
+  }
+
+  .main-slider__wrapper {
+    transform: translate3d(0, var(--initial-slide-offset, 0%), 0);
   }
 
   @media (width >= 1024px) {

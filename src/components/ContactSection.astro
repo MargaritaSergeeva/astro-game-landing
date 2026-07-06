@@ -49,7 +49,7 @@ const { translation } = Astro.props;
   .contact-section {
     min-height: 100dvh;
     padding-block: 140px 0;
-    overflow: hidden auto;
+    overflow: hidden;
     scroll-margin-top: 84px;
   }
 
@@ -60,8 +60,8 @@ const { translation } = Astro.props;
 
   .contact-section__studio-email {
     display: block;
-    margin-top: 64px;
-    font-size: clamp(64px, 6.7vw, var(--type-contact-email-size));
+    margin-top: clamp(28px, 5.948dvh, 64px);
+    font-size: clamp(56px, min(6.7vw, 11.896dvh), var(--type-contact-email-size));
     font-weight: var(--font-weight-medium);
     line-height: 1.06;
     color: var(--color-accent);
@@ -72,30 +72,30 @@ const { translation } = Astro.props;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 32px;
-    margin-top: 88px;
+    margin-top: clamp(36px, 8.178dvh, 88px);
   }
 
   .contact-section__ceo {
     display: grid;
-    gap: 22px;
+    gap: clamp(10px, 2.045dvh, 22px);
     align-content: start;
   }
 
   .contact-section__ceo span,
   .contact-section__copy {
-    font-size: clamp(18px, 1.25vw, 24px);
+    font-size: clamp(16px, min(1.25vw, 2.23dvh), 24px);
     line-height: 1.35;
     color: var(--color-text-muted);
   }
 
   .contact-section__ceo a {
-    font-size: clamp(20px, 1.45vw, 28px);
+    font-size: clamp(18px, min(1.45vw, 2.602dvh), 28px);
     line-height: 1.35;
   }
 
   .contact-section__copy {
     display: grid;
-    gap: 28px;
+    gap: clamp(12px, 2.602dvh, 28px);
   }
 
   .contact-section__copy p:nth-child(2) {
@@ -109,12 +109,26 @@ const { translation } = Astro.props;
   .contact-section__word {
     position: absolute;
     right: 0;
-    bottom: -84px;
+    bottom: clamp(-84px, -7.807dvh, -40px);
     left: 0;
-    width: 100%;
+    width: min(100%, 163.569dvh);
     height: auto;
+    margin-inline: auto;
     pointer-events: none;
     opacity: 0.9;
+  }
+
+  @media (width >= 1024px) {
+    .contact-section {
+      height: 100dvh;
+      min-height: 0;
+      padding-top: var(--section-padding-top-fluid);
+    }
+
+    .contact-section__inner {
+      height: 100%;
+      min-height: 0;
+    }
   }
 
   @media (width <= 767px) {
@@ -182,6 +196,7 @@ const { translation } = Astro.props;
       left: 50%;
       width: 540px;
       max-width: none;
+      margin-inline: 0;
       transform: translateX(-50%);
     }
   }
