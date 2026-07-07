@@ -4,6 +4,8 @@ export type Locale = (typeof supportedLocales)[number];
 
 export const defaultLocale: Locale = 'en';
 
+export const localeStorageKey = 'twilighthaven:locale';
+
 export const localeMeta: Record<Locale, { label: string; shortLabel: string }> = {
   en: { label: 'English', shortLabel: 'EN' },
   ru: { label: 'Русский', shortLabel: 'RU' },

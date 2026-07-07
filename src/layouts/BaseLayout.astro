@@ -1,7 +1,7 @@
 ---
 import backgroundDesktop from '../assets/images/background.webp';
 import backgroundMobile from '../assets/images/background-mobile.webp';
-import { defaultLocale, supportedLocales, type Locale } from '../i18n/config';
+import { defaultLocale, localeStorageKey, supportedLocales, type Locale } from '../i18n/config';
 import '../styles/global.css';
 
 interface Props {
@@ -95,6 +95,22 @@ const localeMap: Record<Locale, string> = {
     {ogImageHref && <meta name="twitter:image" content={ogImageHref} />}
     {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script
+      is:inline
+      define:vars={{
+        locale,
+        localeStorageKey,
+        supportedLocales,
+      }}
+    >
+      try {
+        if (supportedLocales.includes(locale)) {
+          window.localStorage.setItem(localeStorageKey, locale);
+        }
+      } catch {
+        // localStorage can be unavailable in private or restricted browser modes.
+      }
+    </script>
     {
       structuredData.map((item) => (
         <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />

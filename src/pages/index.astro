@@ -1,0 +1,39 @@
+---
+import { defaultLocale, localeStorageKey, supportedLocales } from '../i18n/config';
+
+const redirectScript = `
+(() => {
+  const defaultLocale = ${JSON.stringify(defaultLocale)};
+  const localeStorageKey = ${JSON.stringify(localeStorageKey)};
+  const supportedLocales = ${JSON.stringify(supportedLocales)};
+  let locale = defaultLocale;
+
+  try {
+    const savedLocale = window.localStorage.getItem(localeStorageKey);
+    if (supportedLocales.includes(savedLocale)) locale = savedLocale;
+  } catch {
+    // localStorage can be unavailable in private or restricted browser modes.
+  }
+
+  window.location.replace(\`/\${locale}/\${window.location.search}\${window.location.hash}\`);
+})();
+`;
+---
+
+<!doctype html>
+<html lang={defaultLocale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f0f0f" />
+    <title>TWILIGHTHAVEN</title>
+    <script is:inline set:html={redirectScript} />
+  </head>
+  <body>
+    <noscript>
+      <a href={`/${defaultLocale}/`}>Open TWILIGHTHAVEN</a>
+    </noscript>
+  </body>
+</html>
