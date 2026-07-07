@@ -1,23 +1,5 @@
 ---
 import { defaultLocale, localeStorageKey, supportedLocales } from '../i18n/config';
-
-const redirectScript = `
-(() => {
-  const defaultLocale = ${JSON.stringify(defaultLocale)};
-  const localeStorageKey = ${JSON.stringify(localeStorageKey)};
-  const supportedLocales = ${JSON.stringify(supportedLocales)};
-  let locale = defaultLocale;
-
-  try {
-    const savedLocale = window.localStorage.getItem(localeStorageKey);
-    if (supportedLocales.includes(savedLocale)) locale = savedLocale;
-  } catch {
-    // localStorage can be unavailable in private or restricted browser modes.
-  }
-
-  window.location.replace(\`/\${locale}/\${window.location.search}\${window.location.hash}\`);
-})();
-`;
 ---
 
 <!doctype html>
@@ -29,7 +11,29 @@ const redirectScript = `
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0f0f0f" />
     <title>TWILIGHTHAVEN</title>
-    <script is:inline set:html={redirectScript} />
+    <script
+      is:inline
+      define:vars={{
+        defaultLocale,
+        localeStorageKey,
+        supportedLocales,
+      }}
+    >
+      (() => {
+        let locale = defaultLocale;
+
+        try {
+          const savedLocale = window.localStorage.getItem(localeStorageKey);
+          if (supportedLocales.includes(savedLocale)) {
+            locale = savedLocale;
+          }
+        } catch {
+          locale = defaultLocale;
+        }
+
+        window.location.replace(`/${locale}/${window.location.search}${window.location.hash}`);
+      })();
+    </script>
   </head>
   <body>
     <noscript>

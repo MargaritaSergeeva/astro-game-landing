@@ -47,14 +47,20 @@ const { currentLocale, label, currentSection, openUpward = false } = Astro.props
 
   document.addEventListener('pointerdown', (event) => {
     languageSwitchers.forEach((switcher) => {
-      if (switcher.open && !switcher.contains(event.target as Node)) switcher.open = false;
+      if (switcher.open && !switcher.contains(event.target as Node)) {
+        switcher.open = false;
+      }
     });
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
+    if (event.key !== 'Escape') {
+      return;
+    }
     languageSwitchers.forEach((switcher) => {
-      if (switcher.open) switcher.open = false;
+      if (switcher.open) {
+        switcher.open = false;
+      }
     });
   });
 </script>

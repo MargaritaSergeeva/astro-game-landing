@@ -134,7 +134,9 @@ const navigation = [
     'a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
 
   const closeMenu = () => {
-    if (!menu || !openButton) return;
+    if (!menu || !openButton) {
+      return;
+    }
     menu.hidden = true;
     openButton.setAttribute('aria-expanded', 'false');
     document.body.dataset.menuOpen = 'false';
@@ -142,7 +144,9 @@ const navigation = [
   };
 
   const openMenu = () => {
-    if (!menu || !openButton) return;
+    if (!menu || !openButton) {
+      return;
+    }
     previouslyFocused = document.activeElement as HTMLElement;
     menu.hidden = false;
     openButton.setAttribute('aria-expanded', 'true');
@@ -157,17 +161,23 @@ const navigation = [
   });
 
   document.addEventListener('keydown', (event) => {
-    if (!menu || menu.hidden) return;
+    if (!menu || menu.hidden) {
+      return;
+    }
     if (event.key === 'Escape') {
       closeMenu();
       return;
     }
-    if (event.key !== 'Tab') return;
+    if (event.key !== 'Tab') {
+      return;
+    }
 
     const focusable = [...menu.querySelectorAll<HTMLElement>(focusableSelector)];
     const first = focusable[0];
     const last = focusable.at(-1);
-    if (!first || !last) return;
+    if (!first || !last) {
+      return;
+    }
 
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();

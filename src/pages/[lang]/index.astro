@@ -116,21 +116,31 @@ const structuredData = [
     const activeSection = sectionIds[index] ?? sectionIds[0];
     sectionLinks.forEach((link) => {
       const isActive = Number(link.dataset.slideIndex) === index;
-      if (isActive) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
+      if (isActive) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
     });
     document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach((link) => {
       const basePath = link.dataset.basePath;
-      if (basePath) link.href = `${basePath}#${activeSection}`;
+      if (basePath) {
+        link.href = `${basePath}#${activeSection}`;
+      }
     });
   };
 
   const setHash = (index: number, method: 'push' | 'replace' = 'push') => {
     const hash = `#${sectionIds[index]}`;
-    if (window.location.hash === hash) return;
+    if (window.location.hash === hash) {
+      return;
+    }
     const url = `${window.location.pathname}${window.location.search}${hash}`;
-    if (method === 'push') window.history.pushState({ section: sectionIds[index] }, '', url);
-    else window.history.replaceState({ section: sectionIds[index] }, '', url);
+    if (method === 'push') {
+      window.history.pushState({ section: sectionIds[index] }, '', url);
+    } else {
+      window.history.replaceState({ section: sectionIds[index] }, '', url);
+    }
   };
 
   const findScrollableElement = (
@@ -146,10 +156,14 @@ const structuredData = [
       if (isScrollable && element.scrollHeight > element.clientHeight + 1) {
         const canScrollDown = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
         const canScrollUp = element.scrollTop > 1;
-        if ((deltaY > 0 && canScrollDown) || (deltaY < 0 && canScrollUp)) return element;
+        if ((deltaY > 0 && canScrollDown) || (deltaY < 0 && canScrollUp)) {
+          return element;
+        }
       }
 
-      if (element === slide) break;
+      if (element === slide) {
+        break;
+      }
       element = element.parentElement ?? slide;
     }
 
@@ -166,7 +180,9 @@ const structuredData = [
   };
 
   const scheduleWheelGestureEnd = () => {
-    if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
+    if (wheelGestureEndTimer) {
+      window.clearTimeout(wheelGestureEndTimer);
+    }
     wheelGestureEndTimer = window.setTimeout(finishWheelGesture, wheelGestureEndDelay);
   };
 
@@ -176,7 +192,9 @@ const structuredData = [
     }
 
     const activeSlide = mainSlider.slides[mainSlider.activeIndex] as HTMLElement | undefined;
-    if (!activeSlide) return;
+    if (!activeSlide) {
+      return;
+    }
     const normalizedDelta =
       event.deltaMode === WheelEvent.DOM_DELTA_LINE
         ? event.deltaY * 16
@@ -187,7 +205,9 @@ const structuredData = [
 
     const now = Date.now();
     if (!wheelGestureActive || now - lastWheelEventAt > wheelGestureEndDelay) {
-      if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
+      if (wheelGestureEndTimer) {
+        window.clearTimeout(wheelGestureEndTimer);
+      }
       wheelGestureActive = true;
       wheelGestureHandled = false;
       wheelGestureScrollElement = null;
@@ -200,7 +220,9 @@ const structuredData = [
       wheelGestureScrollElement.scrollBy({ top: normalizedDelta });
       return;
     }
-    if (wheelGestureHandled) return;
+    if (wheelGestureHandled) {
+      return;
+    }
 
     const scrollableElement = findScrollableElement(event.target, activeSlide, normalizedDelta);
     if (scrollableElement) {
@@ -210,14 +232,20 @@ const structuredData = [
       return;
     }
 
-    if (wheelDelta !== 0 && Math.sign(wheelDelta) !== Math.sign(normalizedDelta)) wheelDelta = 0;
+    if (wheelDelta !== 0 && Math.sign(wheelDelta) !== Math.sign(normalizedDelta)) {
+      wheelDelta = 0;
+    }
     wheelDelta += normalizedDelta;
-    if (Math.abs(wheelDelta) < wheelThreshold) return;
+    if (Math.abs(wheelDelta) < wheelThreshold) {
+      return;
+    }
 
     const shouldMoveNext = wheelDelta > 0;
     wheelDelta = 0;
     wheelGestureHandled = true;
-    if ((shouldMoveNext && mainSlider.isEnd) || (!shouldMoveNext && mainSlider.isBeginning)) return;
+    if ((shouldMoveNext && mainSlider.isEnd) || (!shouldMoveNext && mainSlider.isBeginning)) {
+      return;
+    }
 
     const destinationIndex = mainSlider.activeIndex + (shouldMoveNext ? 1 : -1);
     const destinationSlide = mainSlider.slides[destinationIndex] as HTMLElement | undefined;
@@ -226,12 +254,17 @@ const structuredData = [
         ? 0
         : destinationSlide.scrollHeight - destinationSlide.clientHeight;
     }
-    if (shouldMoveNext) mainSlider.slideNext();
-    else mainSlider.slidePrev();
+    if (shouldMoveNext) {
+      mainSlider.slideNext();
+    } else {
+      mainSlider.slidePrev();
+    }
   };
 
   const initializeSlider = () => {
-    if (!desktopQuery.matches || !sliderElement || mainSlider) return;
+    if (!desktopQuery.matches || !sliderElement || mainSlider) {
+      return;
+    }
     mainSlider = new Swiper(sliderElement, {
       modules: [A11y, Keyboard],
       a11y: { enabled: true },
@@ -259,23 +292,32 @@ const structuredData = [
   };
 
   const destroySlider = () => {
-    if (!mainSlider) return;
+    if (!mainSlider) {
+      return;
+    }
     window.removeEventListener('wheel', handleDesktopWheel);
     mainSlider.destroy(true, true);
     mainSlider = undefined;
-    if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
+    if (wheelGestureEndTimer) {
+      window.clearTimeout(wheelGestureEndTimer);
+    }
     finishWheelGesture();
   };
 
   const updateMode = () => {
-    if (desktopQuery.matches) initializeSlider();
-    else destroySlider();
+    if (desktopQuery.matches) {
+      initializeSlider();
+    } else {
+      destroySlider();
+    }
   };
 
   sectionLinks.forEach((link) => {
     link.addEventListener('click', (event) => {
       const index = Number(link.dataset.slideIndex);
-      if (!Number.isInteger(index)) return;
+      if (!Number.isInteger(index)) {
+        return;
+      }
       setActiveNavigation(index);
 
       if (desktopQuery.matches && mainSlider) {
@@ -298,13 +340,19 @@ const structuredData = [
 
   const observer = new IntersectionObserver(
     (entries) => {
-      if (desktopQuery.matches) return;
+      if (desktopQuery.matches) {
+        return;
+      }
       const visible = entries
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
+      if (!visible) {
+        return;
+      }
       const index = sectionIds.indexOf(visible.target.id as (typeof sectionIds)[number]);
-      if (index >= 0) setActiveNavigation(index);
+      if (index >= 0) {
+        setActiveNavigation(index);
+      }
     },
     { threshold: [0.2, 0.5] },
   );
