@@ -30,7 +30,6 @@
   --color-panel: rgb(15 15 15 / 50%);
   --color-border: #ffffff;
   --color-border-muted: rgb(255 255 255 / 50%);
-  --color-texture-base: #e1e1e1;
   --color-shadow: rgb(33 33 33 / 20%);
   --color-focus: #ffffff;
 
@@ -42,17 +41,11 @@
   --border-width-default: 1px;
   --border-width-accent: 2px;
   --control-height: 56px;
-  --icon-size: 24px;
   --social-size: 56px;
   --social-expanded-width: 149px;
-  --social-padding-inline: 16px;
   --social-content-gap: 10px;
-  --texture-opacity: 0.4;
-  --texture-wrapper-opacity: 0.5;
 
   --header-height: 104px;
-  --page-inline: 80px;
-  --section-top: 132px;
 
   --type-hero-size: 90px;
   --type-hero-line: 1;
@@ -64,22 +57,12 @@
   --type-stat-line: 88px;
   --type-lead-size: 32px;
   --type-lead-line: 44.8px;
-  --type-contact-label-size: 32px;
-  --type-contact-label-line: 44px;
   --type-eyebrow-size: 20px;
   --type-eyebrow-line: 28px;
   --type-nav-size: 16px;
   --type-nav-line: 24px;
-  --type-body-xl-size: 24px;
-  --type-body-xl-line: 32px;
-  --type-body-lg-size: 20px;
-  --type-body-lg-line: 28px;
   --type-body-md-size: 16px;
   --type-body-md-line: 24px;
-  --type-body-sm-size: 14px;
-  --type-body-sm-line: 20px;
-  --type-caption-size: 12px;
-  --type-caption-line: 16px;
   --type-chip-size: 12px;
   --type-chip-line: 16px;
 
@@ -115,12 +98,8 @@
     --type-stat-line: 44px;
     --type-lead-size: 16px;
     --type-lead-line: 24px;
-    --type-contact-label-size: 16px;
-    --type-contact-label-line: 24px;
     --type-eyebrow-size: 14px;
     --type-eyebrow-line: 20px;
-    --type-body-xl-size: 16px;
-    --type-body-xl-line: 24px;
     --type-body-md-size: 14px;
     --type-body-md-line: 20px;
     --type-chip-size: 10px;

@@ -1,7 +1,7 @@
 ---
 import backgroundDesktop from '../assets/images/background.webp';
 import backgroundMobile from '../assets/images/background-mobile.webp';
-import { defaultLocale, localeMeta, supportedLocales, type Locale } from '../i18n/config';
+import { defaultLocale, supportedLocales, type Locale } from '../i18n/config';
 import '../styles/global.css';
 
 interface Props {
@@ -30,6 +30,8 @@ const {
   noindex = false,
 } = Astro.props;
 const canonicalUrl = new URL(`/${locale}/`, Astro.site ?? Astro.url.origin);
+const canonicalHref = canonicalUrl.toString();
+const ogImageHref = ogImage?.toString();
 const localeMap: Record<Locale, string> = {
   en: 'en_US',
   ru: 'ru_RU',
@@ -50,7 +52,7 @@ const localeMap: Record<Locale, string> = {
       content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
     />
     <title>{title}</title>
-    {!noindex && <link rel="canonical" href={canonicalUrl} />}
+    {!noindex && <link rel="canonical" href={canonicalHref} />}
     {
       !noindex &&
         supportedLocales.map((alternateLocale) => (
@@ -58,7 +60,6 @@ const localeMap: Record<Locale, string> = {
             rel="alternate"
             hreflang={alternateLocale}
             href={new URL(`/${alternateLocale}/`, canonicalUrl)}
-            title={localeMeta[alternateLocale].label}
           />
         ))
     }
@@ -75,9 +76,9 @@ const localeMap: Record<Locale, string> = {
     <meta property="og:site_name" content="TWILIGHTHAVEN" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {!noindex && <meta property="og:url" content={canonicalUrl} />}
+    {!noindex && <meta property="og:url" content={canonicalHref} />}
     <meta property="og:locale" content={localeMap[locale]} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImageHref && <meta property="og:image" content={ogImageHref} />}
     {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
     {ogImageWidth && <meta property="og:image:width" content={String(ogImageWidth)} />}
     {ogImageHeight && <meta property="og:image:height" content={String(ogImageHeight)} />}
@@ -88,10 +89,10 @@ const localeMap: Record<Locale, string> = {
           <meta property="og:locale:alternate" content={localeMap[alternateLocale]} />
         ))
     }
-    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:card" content={ogImageHref ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {ogImageHref && <meta name="twitter:image" content={ogImageHref} />}
     {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {
