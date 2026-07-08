@@ -41,27 +41,39 @@ const { currentLocale, label, currentSection, openUpward = false } = Astro.props
 </details>
 
 <script>
-  const languageSwitchers = [
+  const getLanguageSwitchers = () => [
     ...document.querySelectorAll<HTMLDetailsElement>('.language-switcher'),
   ];
 
-  document.addEventListener('pointerdown', (event) => {
-    languageSwitchers.forEach((switcher) => {
-      if (switcher.open && !switcher.contains(event.target as Node)) {
+  const closeLanguageSwitchers = (target?: EventTarget | null) => {
+    getLanguageSwitchers().forEach((switcher) => {
+      if (!switcher.open) {
+        return;
+      }
+
+      if (!target || !(target instanceof Node) || !switcher.contains(target)) {
         switcher.open = false;
       }
     });
+  };
+
+  document.addEventListener(
+    'pointerdown',
+    (event) => {
+      closeLanguageSwitchers(event.target);
+    },
+    { capture: true },
+  );
+
+  document.addEventListener('click', (event) => {
+    closeLanguageSwitchers(event.target);
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') {
       return;
     }
-    languageSwitchers.forEach((switcher) => {
-      if (switcher.open) {
-        switcher.open = false;
-      }
-    });
+    closeLanguageSwitchers();
   });
 </script>
 
