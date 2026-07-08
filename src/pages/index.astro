@@ -1,5 +1,5 @@
 ---
-import { defaultLocale, localeStorageKey, supportedLocales } from '../i18n/config';
+import { defaultLocale } from '../i18n/config';
 ---
 
 <!doctype html>
@@ -11,28 +11,8 @@ import { defaultLocale, localeStorageKey, supportedLocales } from '../i18n/confi
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0f0f0f" />
     <title>TWILIGHTHAVEN</title>
-    <script
-      is:inline
-      define:vars={{
-        defaultLocale,
-        localeStorageKey,
-        supportedLocales,
-      }}
-    >
-      (() => {
-        let locale = defaultLocale;
-
-        try {
-          const savedLocale = window.localStorage.getItem(localeStorageKey);
-          if (supportedLocales.includes(savedLocale)) {
-            locale = savedLocale;
-          }
-        } catch {
-          locale = defaultLocale;
-        }
-
-        window.location.replace(`/${locale}/${window.location.search}${window.location.hash}`);
-      })();
+    <script is:inline define:vars={{ defaultLocale }}>
+      window.location.replace(`/${defaultLocale}/${window.location.search}${window.location.hash}`);
     </script>
   </head>
   <body>
