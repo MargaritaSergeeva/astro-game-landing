@@ -25,7 +25,7 @@ const { translation } = Astro.props;
     <span class="game-card__number" aria-hidden="true">01</span>
   </div>
 
-  <div class="game-card__content">
+  <div class="game-card__content swiper-no-swiping">
     <ul class="game-card__genres" aria-label={translation.games.genresLabel}>
       {translation.games.genres.map((genre) => <li>{genre}</li>)}
     </ul>

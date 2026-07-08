@@ -3,6 +3,7 @@ import { A11y, Keyboard } from 'swiper/modules';
 
 const sectionIds = ['home', 'games', 'about', 'contacts'] as const;
 const desktopQuery = window.matchMedia('(min-width: 1024px)');
+const touchQuery = window.matchMedia('(any-pointer: coarse)');
 const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const sliderElement = document.querySelector<HTMLElement>('[data-main-slider]');
 const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-section-link]')];
@@ -175,11 +176,14 @@ const initializeSlider = () => {
   mainSlider = new Swiper(sliderElement, {
     modules: [A11y, Keyboard],
     a11y: { enabled: true },
-    allowTouchMove: false,
+    allowTouchMove: touchQuery.matches,
     direction: 'vertical',
     initialSlide: getHashIndex(),
     keyboard: { enabled: true, onlyInViewport: false },
     loop: false,
+    noSwiping: true,
+    noSwipingClass: 'swiper-no-swiping',
+    simulateTouch: false,
     speed: reducedMotionQuery.matches ? 0 : 500,
     on: {
       init(swiper) {
