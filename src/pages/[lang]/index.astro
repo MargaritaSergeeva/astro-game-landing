@@ -27,6 +27,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const translation = getTranslations(locale);
+const noindex = import.meta.env.SITE_NOINDEX === 'true';
 const pageUrl = new URL(`/${locale}/`, Astro.site ?? Astro.url.origin);
 const imageUrl = new URL(gameArtwork.src, pageUrl);
 const ogImageUrl = new URL(ogArtwork.src, pageUrl);
@@ -43,12 +44,23 @@ const structuredData = [
   },
   {
     '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${pageUrl.toString()}#webpage`,
+    url: pageUrl.toString(),
+    name: translation.seo.title,
+    description: translation.seo.description,
+    inLanguage: locale,
+    publisher: { '@id': `${pageUrl.origin}/#organization` },
+  },
+  {
+    '@context': 'https://schema.org',
     '@type': 'VideoGame',
     '@id': `${pageUrl.origin}/#infogrind`,
     name: siteConfig.gameName,
     description: translation.games.description.join(' '),
     image: imageUrl.toString(),
     genre: translation.games.genres,
+    inLanguage: locale,
     author: { '@id': `${pageUrl.origin}/#organization` },
   },
 ];
@@ -64,6 +76,7 @@ const structuredData = [
   ogImageAlt={`${siteConfig.name} — ${siteConfig.gameName}`}
   ogImageWidth={719}
   ogImageHeight={655}
+  noindex={noindex}
 >
   <Fragment slot="head">
     <script is:inline>
@@ -87,235 +100,7 @@ const structuredData = [
 </BaseLayout>
 
 <script>
-  import { A11y, Keyboard } from 'swiper/modules';
-  import { Swiper } from 'swiper';
-
-  const sectionIds = ['home', 'games', 'about', 'contacts'] as const;
-  const desktopQuery = window.matchMedia('(min-width: 1024px)');
-  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const sliderElement = document.querySelector<HTMLElement>('[data-main-slider]');
-  const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-section-link]')];
-  let mainSlider: Swiper | undefined;
-  let suppressHistory = false;
-  let wheelDelta = 0;
-  let wheelGestureActive = false;
-  let wheelGestureHandled = false;
-  let wheelGestureScrollElement: HTMLElement | null = null;
-  let wheelGestureEndTimer: number | undefined;
-  let lastWheelEventAt = 0;
-  const wheelThreshold = 12;
-  const wheelGestureEndDelay = 60;
-
-  const getHashIndex = () => {
-    const id = window.location.hash.replace('#', '');
-    const index = sectionIds.indexOf(id as (typeof sectionIds)[number]);
-    return index >= 0 ? index : 0;
-  };
-
-  const setActiveNavigation = (index: number) => {
-    const activeSection = sectionIds[index] ?? sectionIds[0];
-    sectionLinks.forEach((link) => {
-      const isActive = Number(link.dataset.slideIndex) === index;
-      if (isActive) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
-    });
-    document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach((link) => {
-      const basePath = link.dataset.basePath;
-      if (basePath) link.href = `${basePath}#${activeSection}`;
-    });
-  };
-
-  const setHash = (index: number, method: 'push' | 'replace' = 'push') => {
-    const hash = `#${sectionIds[index]}`;
-    if (window.location.hash === hash) return;
-    const url = `${window.location.pathname}${window.location.search}${hash}`;
-    if (method === 'push') window.history.pushState({ section: sectionIds[index] }, '', url);
-    else window.history.replaceState({ section: sectionIds[index] }, '', url);
-  };
-
-  const findScrollableElement = (
-    target: EventTarget | null,
-    slide: HTMLElement,
-    deltaY: number,
-  ) => {
-    let element = target instanceof HTMLElement && slide.contains(target) ? target : slide;
-
-    while (element) {
-      const styles = window.getComputedStyle(element);
-      const isScrollable = /(auto|scroll)/.test(styles.overflowY);
-      if (isScrollable && element.scrollHeight > element.clientHeight + 1) {
-        const canScrollDown = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
-        const canScrollUp = element.scrollTop > 1;
-        if ((deltaY > 0 && canScrollDown) || (deltaY < 0 && canScrollUp)) return element;
-      }
-
-      if (element === slide) break;
-      element = element.parentElement ?? slide;
-    }
-
-    return null;
-  };
-
-  const finishWheelGesture = () => {
-    wheelGestureActive = false;
-    wheelGestureHandled = false;
-    wheelGestureScrollElement = null;
-    wheelDelta = 0;
-    lastWheelEventAt = 0;
-    wheelGestureEndTimer = undefined;
-  };
-
-  const scheduleWheelGestureEnd = () => {
-    if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
-    wheelGestureEndTimer = window.setTimeout(finishWheelGesture, wheelGestureEndDelay);
-  };
-
-  const handleDesktopWheel = (event: WheelEvent) => {
-    if (!mainSlider || !desktopQuery.matches || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
-      return;
-    }
-
-    const activeSlide = mainSlider.slides[mainSlider.activeIndex] as HTMLElement | undefined;
-    if (!activeSlide) return;
-    const normalizedDelta =
-      event.deltaMode === WheelEvent.DOM_DELTA_LINE
-        ? event.deltaY * 16
-        : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
-          ? event.deltaY * activeSlide.clientHeight
-          : event.deltaY;
-    event.preventDefault();
-
-    const now = Date.now();
-    if (!wheelGestureActive || now - lastWheelEventAt > wheelGestureEndDelay) {
-      if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
-      wheelGestureActive = true;
-      wheelGestureHandled = false;
-      wheelGestureScrollElement = null;
-      wheelDelta = 0;
-    }
-    lastWheelEventAt = now;
-    scheduleWheelGestureEnd();
-
-    if (wheelGestureScrollElement) {
-      wheelGestureScrollElement.scrollBy({ top: normalizedDelta });
-      return;
-    }
-    if (wheelGestureHandled) return;
-
-    const scrollableElement = findScrollableElement(event.target, activeSlide, normalizedDelta);
-    if (scrollableElement) {
-      wheelGestureScrollElement = scrollableElement;
-      scrollableElement.scrollBy({ top: normalizedDelta });
-      wheelDelta = 0;
-      return;
-    }
-
-    if (wheelDelta !== 0 && Math.sign(wheelDelta) !== Math.sign(normalizedDelta)) wheelDelta = 0;
-    wheelDelta += normalizedDelta;
-    if (Math.abs(wheelDelta) < wheelThreshold) return;
-
-    const shouldMoveNext = wheelDelta > 0;
-    wheelDelta = 0;
-    wheelGestureHandled = true;
-    if ((shouldMoveNext && mainSlider.isEnd) || (!shouldMoveNext && mainSlider.isBeginning)) return;
-
-    const destinationIndex = mainSlider.activeIndex + (shouldMoveNext ? 1 : -1);
-    const destinationSlide = mainSlider.slides[destinationIndex] as HTMLElement | undefined;
-    if (destinationSlide) {
-      destinationSlide.scrollTop = shouldMoveNext
-        ? 0
-        : destinationSlide.scrollHeight - destinationSlide.clientHeight;
-    }
-    if (shouldMoveNext) mainSlider.slideNext();
-    else mainSlider.slidePrev();
-  };
-
-  const initializeSlider = () => {
-    if (!desktopQuery.matches || !sliderElement || mainSlider) return;
-    mainSlider = new Swiper(sliderElement, {
-      modules: [A11y, Keyboard],
-      a11y: { enabled: true },
-      allowTouchMove: false,
-      direction: 'vertical',
-      initialSlide: getHashIndex(),
-      keyboard: { enabled: true, onlyInViewport: false },
-      loop: false,
-      speed: reducedMotionQuery.matches ? 0 : 500,
-      on: {
-        init(swiper) {
-          setActiveNavigation(swiper.activeIndex);
-        },
-        slideChange(swiper) {
-          setActiveNavigation(swiper.activeIndex);
-          if (suppressHistory) {
-            suppressHistory = false;
-            return;
-          }
-          setHash(swiper.activeIndex, 'push');
-        },
-      },
-    });
-    window.addEventListener('wheel', handleDesktopWheel, { passive: false });
-  };
-
-  const destroySlider = () => {
-    if (!mainSlider) return;
-    window.removeEventListener('wheel', handleDesktopWheel);
-    mainSlider.destroy(true, true);
-    mainSlider = undefined;
-    if (wheelGestureEndTimer) window.clearTimeout(wheelGestureEndTimer);
-    finishWheelGesture();
-  };
-
-  const updateMode = () => {
-    if (desktopQuery.matches) initializeSlider();
-    else destroySlider();
-  };
-
-  sectionLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const index = Number(link.dataset.slideIndex);
-      if (!Number.isInteger(index)) return;
-      setActiveNavigation(index);
-
-      if (desktopQuery.matches && mainSlider) {
-        event.preventDefault();
-        suppressHistory = true;
-        setHash(index, 'push');
-        mainSlider.slideTo(index, reducedMotionQuery.matches ? 0 : undefined);
-      }
-    });
-  });
-
-  const restoreFromHistory = () => {
-    const index = getHashIndex();
-    setActiveNavigation(index);
-    if (desktopQuery.matches && mainSlider) {
-      suppressHistory = true;
-      mainSlider.slideTo(index, reducedMotionQuery.matches ? 0 : undefined);
-    }
-  };
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (desktopQuery.matches) return;
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      const index = sectionIds.indexOf(visible.target.id as (typeof sectionIds)[number]);
-      if (index >= 0) setActiveNavigation(index);
-    },
-    { threshold: [0.2, 0.5] },
-  );
-
-  document
-    .querySelectorAll<HTMLElement>('[data-section]')
-    .forEach((section) => observer.observe(section));
-  desktopQuery.addEventListener('change', updateMode);
-  window.addEventListener('popstate', restoreFromHistory);
-  window.addEventListener('hashchange', restoreFromHistory);
-  updateMode();
+  import '../../scripts/main-slider';
 </script>
 
 <style>
@@ -325,21 +110,17 @@ const structuredData = [
   }
 
   .main-slider__wrapper {
+    height: 100%;
     transform: translate3d(0, var(--initial-slide-offset, 0%), 0);
   }
 
-  @media (width >= 1024px) {
-    .main-slider {
-      height: 100dvh;
-    }
-
-    .main-slider__wrapper {
-      height: 100%;
-    }
+  .main-slider {
+    height: 100dvh;
   }
 
   @media (width <= 1023px) {
     .main-slider {
+      height: auto;
       overflow: visible;
     }
 

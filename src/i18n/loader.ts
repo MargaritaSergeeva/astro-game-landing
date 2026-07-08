@@ -11,5 +11,3 @@ export type Translations = typeof en;
 export function getTranslations(locale: Locale): Translations {
   return translations[locale] as Translations;
 }
-
-export { translations };

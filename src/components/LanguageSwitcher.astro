@@ -41,22 +41,7 @@ const { currentLocale, label, currentSection, openUpward = false } = Astro.props
 </details>
 
 <script>
-  const languageSwitchers = [
-    ...document.querySelectorAll<HTMLDetailsElement>('.language-switcher'),
-  ];
-
-  document.addEventListener('pointerdown', (event) => {
-    languageSwitchers.forEach((switcher) => {
-      if (switcher.open && !switcher.contains(event.target as Node)) switcher.open = false;
-    });
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    languageSwitchers.forEach((switcher) => {
-      if (switcher.open) switcher.open = false;
-    });
-  });
+  import '../scripts/language-switcher';
 </script>
 
 <style>

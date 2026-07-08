@@ -14,15 +14,10 @@
     "languageSwitcherLabel": "言語を選択",
     "skipToContent": "本文へ移動",
     "openMenu": "メニューを開く",
-    "closeMenu": "メニューを閉じる",
-    "previousSlide": "前のスライド",
-    "nextSlide": "次のスライド",
-    "slideStatus": "{{total}}枚中{{current}}枚目"
+    "closeMenu": "メニューを閉じる"
   },
   "home": {
-    "index": "01",
     "eyebrow": "インディーゲーム開発スタジオ",
-    "title": "TWILIGHTHAVEN",
     "intro": [
       "私たちは、物語、探索、そしてプレイヤーの選択に意味がある、没入感あふれるゲームを制作しています。",
       "プレイヤーが何時間も夢中になって探索し、クリア後も語り合いたくなるような、唯一無二の世界を創り続けることが私たちの目標です。",
@@ -34,7 +29,6 @@
   "games": {
     "index": "02",
     "title": "ゲーム",
-    "intro": "私たちが制作するすべてのゲームは、共通の世界観の一部であり、新しいプロジェクトごとにその世界観は広がり続けています。",
     "status": "Steamでデモ版公開中",
     "description": [
       "世界規模の「カタクリズム」の後、あなたは危険な異常アーティファクトと旧世界の知識を保管する組織「バンク」の長官となります。",
@@ -75,8 +69,7 @@
     "studioEmailLabel": "当スタジオ公式メール",
     "ceoLabel": "CEO（代表）",
     "addressLabel": "住所",
-    "addressPlaceholder": "〒123-4567 東京都渋谷区サンプル1-2-3",
-    "footerTagline": "プレイヤーのためのゲームを創る。独自の世界観を広げる。新たな物語を紡ぐ。"
+    "addressPlaceholder": "〒123-4567 東京都渋谷区サンプル1-2-3"
   },
   "media": {
     "gameArtworkAlt": "未来的な装甲キャラクターを描いたINFOGRINDのキーアート",

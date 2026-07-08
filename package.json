@@ -14,7 +14,7 @@
     "lint:css:fix": "stylelint \"src/**/*.{css,astro}\" --fix --cache --cache-location .cache/stylelint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "validate": "yarn format:check && yarn lint && yarn lint:css && yarn check"
+    "validate": "prettier --check . && eslint . && stylelint \"src/**/*.{css,astro}\" --cache --cache-location .cache/stylelint && astro check"
   },
   "engines": {
     "node": ">=24.18.0 <25"
@@ -31,6 +31,7 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.6.0",
     "eslint-plugin-astro": "^2.1.1",
+    "globals": "^17.7.0",
     "postcss-html": "^1.8.1",
     "prettier": "^3.9.4",
     "prettier-plugin-astro": "^0.14.1",

@@ -15,10 +15,11 @@ const { translation } = Astro.props;
 <section class="hero swiper-slide" id="home" data-section="home" aria-labelledby="hero-title">
   <div class="hero__inner container">
     <div class="hero__content">
+      <h1 class="sr-only" id="hero-title">{translation.seo.title}</h1>
       <p class="hero__eyebrow"><span aria-hidden="true"></span>{translation.home.eyebrow}</p>
-      <h1 class="hero__title" id="hero-title">
+      <h2 class="hero__title" aria-hidden="true">
         <span>TWILIGHT</span><span>HAVEN</span>
-      </h1>
+      </h2>
       <div class="hero__intro">
         {translation.home.intro.map((paragraph) => <p class="hero__lead">{paragraph}</p>)}
       </div>
@@ -34,7 +35,7 @@ const { translation } = Astro.props;
     </picture>
 
     <SocialLinks expandable class="hero__socials" />
-    <p class="hero__copyright">© {siteConfig.currentYear} TWILIGHTHAVEN</p>
+    <p class="hero__copyright">© {siteConfig.currentYear} {siteConfig.name}</p>
   </div>
 </section>
 

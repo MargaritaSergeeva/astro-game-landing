@@ -14,15 +14,10 @@
     "languageSwitcherLabel": "Choose language",
     "skipToContent": "Skip to content",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "previousSlide": "Previous slide",
-    "nextSlide": "Next slide",
-    "slideStatus": "Slide {{current}} of {{total}}"
+    "closeMenu": "Close menu"
   },
   "home": {
-    "index": "01",
     "eyebrow": "Independent Game Development Studio",
-    "title": "TWILIGHTHAVEN",
     "intro": [
       "We create games that are full of atmospheric experiences where every choice shapes your journey, every corner conceals a new story, and exploration is rewarded.",
       "Our mission is to build worlds that invite players to lose themselves for hours—and leave them with questions worth discussing long after the adventure ends.",
@@ -34,7 +29,6 @@
   "games": {
     "index": "02",
     "title": "Our Games",
-    "intro": "Every game we create is part of a shared universe that continues growing and evolving with each new project.",
     "status": "Steam Demo Available",
     "description": [
       "In the aftermath of a global Cataclysm, you take on the role of the Director of the Bank, an organization entrusted with safeguarding dangerous anomalous artifacts and the knowledge of the old world.",
@@ -75,8 +69,7 @@
     "studioEmailLabel": "Studio Business Email",
     "ceoLabel": "CEO",
     "addressLabel": "Address",
-    "addressPlaceholder": "1 Example Street, Shibuya, Tokyo 123-4567, Japan",
-    "footerTagline": "We create games for players, build our own universe, and tell stories worth exploring."
+    "addressPlaceholder": "1 Example Street, Shibuya, Tokyo 123-4567, Japan"
   },
   "media": {
     "gameArtworkAlt": "INFOGRIND key art featuring a futuristic armored character",
