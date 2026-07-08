@@ -44,12 +44,23 @@ const structuredData = [
   },
   {
     '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${pageUrl.toString()}#webpage`,
+    url: pageUrl.toString(),
+    name: translation.seo.title,
+    description: translation.seo.description,
+    inLanguage: locale,
+    publisher: { '@id': `${pageUrl.origin}/#organization` },
+  },
+  {
+    '@context': 'https://schema.org',
     '@type': 'VideoGame',
     '@id': `${pageUrl.origin}/#infogrind`,
     name: siteConfig.gameName,
     description: translation.games.description.join(' '),
     image: imageUrl.toString(),
     genre: translation.games.genres,
+    inLanguage: locale,
     author: { '@id': `${pageUrl.origin}/#organization` },
   },
 ];

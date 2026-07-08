@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../config/site';
 import { defaultLocale } from '../i18n/config';
 ---
 
@@ -10,14 +11,14 @@ import { defaultLocale } from '../i18n/config';
     <meta name="robots" content="noindex, follow" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0f0f0f" />
-    <title>TWILIGHTHAVEN</title>
+    <title>{siteConfig.name}</title>
     <script is:inline define:vars={{ defaultLocale }}>
       window.location.replace(`/${defaultLocale}/${window.location.search}${window.location.hash}`);
     </script>
   </head>
   <body>
     <noscript>
-      <a href={`/${defaultLocale}/`}>Open TWILIGHTHAVEN</a>
+      <a href={`/${defaultLocale}/`}>Open {siteConfig.name}</a>
     </noscript>
   </body>
 </html>
