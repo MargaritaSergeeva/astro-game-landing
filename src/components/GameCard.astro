@@ -18,7 +18,8 @@ const { translation } = Astro.props;
       alt={translation.media.gameArtworkAlt}
       width="864"
       height="791"
-      loading="lazy"
+      loading="eager"
+      fetchpriority="high"
     />
     <span class="game-card__corner game-card__corner--top" aria-hidden="true"></span>
     <span class="game-card__corner game-card__corner--bottom" aria-hidden="true"></span>
