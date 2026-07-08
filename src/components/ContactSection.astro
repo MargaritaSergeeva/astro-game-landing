@@ -32,11 +32,6 @@ const { translation } = Astro.props;
         <a href={`mailto:${siteConfig.ceoEmail}`}>{siteConfig.ceoEmail}</a>
       </div>
 
-      <div class="contact-section__address">
-        <span>{translation.contact.addressLabel}</span>
-        <p>{translation.contact.addressPlaceholder}</p>
-      </div>
-
       <div class="contact-section__copy">
         <p>{translation.contact.introParagraph}</p>
         <div class="contact-section__copy-followup">
@@ -83,28 +78,25 @@ const { translation } = Astro.props;
 
   .contact-section__details {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-columns: 1fr 2fr;
     gap: 32px;
     margin-top: clamp(36px, 8.178dvh, 88px);
   }
 
-  .contact-section__ceo,
-  .contact-section__address {
+  .contact-section__ceo {
     display: grid;
     gap: clamp(10px, 2.045dvh, 22px);
     align-content: start;
   }
 
   .contact-section__ceo span,
-  .contact-section__address span,
   .contact-section__copy {
     font-size: clamp(16px, min(1.25vw, 2.23dvh), 24px);
     line-height: 1.35;
     color: var(--color-text-muted);
   }
 
-  .contact-section__ceo a,
-  .contact-section__address p {
+  .contact-section__ceo a {
     font-size: clamp(18px, min(1.45vw, 2.602dvh), 28px);
     line-height: 1.35;
   }
@@ -184,8 +176,7 @@ const { translation } = Astro.props;
       margin-top: 34px;
     }
 
-    .contact-section__ceo,
-    .contact-section__address {
+    .contact-section__ceo {
       gap: 10px;
     }
 
@@ -226,14 +217,12 @@ const { translation } = Astro.props;
     }
 
     .contact-section__ceo span,
-    .contact-section__address span,
     .contact-section__copy {
       font-size: 14px;
       line-height: 20px;
     }
 
-    .contact-section__ceo a,
-    .contact-section__address p {
+    .contact-section__ceo a {
       font-size: 20px;
       line-height: 28px;
     }

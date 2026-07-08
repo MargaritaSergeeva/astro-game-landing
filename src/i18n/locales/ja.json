@@ -65,11 +65,9 @@
       "accent": "当スタジオ公式メールアドレスまでご連絡ください",
       "after": "。"
     },
-    "ceoParagraph": "CEO（代表）へ直接ご連絡をご希望の場合は、以下の個人用メールアドレスもご利用いただけます。",
+    "ceoParagraph": "CEO（代表）へ直接ご連絡をご希望の場合は、個人用メールアドレスもご利用いただけます。",
     "studioEmailLabel": "当スタジオ公式メール",
-    "ceoLabel": "CEO（代表）",
-    "addressLabel": "住所",
-    "addressPlaceholder": "〒123-4567 東京都渋谷区サンプル1-2-3"
+    "ceoLabel": "CEO（代表）"
   },
   "media": {
     "gameArtworkAlt": "未来的な装甲キャラクターを描いたINFOGRINDのキーアート",
