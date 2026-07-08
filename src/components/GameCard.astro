@@ -36,30 +36,23 @@ const { translation } = Astro.props;
       {translation.games.description.map((paragraph) => <p>{paragraph}</p>)}
     </div>
     <div class="game-card__actions">
-      {
-        siteConfig.trailerUrl ? (
-          <a class="game-card__button game-card__button--trailer" href={siteConfig.trailerUrl}>
-            {translation.games.trailerCta}
-          </a>
-        ) : (
-          <span class="game-card__button game-card__button--trailer" aria-disabled="true">
-            {translation.games.trailerCta}
-          </span>
-        )
-      }
-      {
-        siteConfig.steamUrl ? (
-          <a class="game-card__button game-card__button--steam" href={siteConfig.steamUrl}>
-            <img src={steamIcon.src} alt="" width="24" height="24" />
-            {translation.games.steamCta}
-          </a>
-        ) : (
-          <span class="game-card__button game-card__button--steam" aria-disabled="true">
-            <img src={steamIcon.src} alt="" width="24" height="24" />
-            {translation.games.steamCta}
-          </span>
-        )
-      }
+      <a
+        class="game-card__button game-card__button--trailer"
+        href={siteConfig.trailerUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {translation.games.trailerCta}
+      </a>
+      <a
+        class="game-card__button game-card__button--steam"
+        href={siteConfig.steamUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src={steamIcon.src} alt="" width="24" height="24" />
+        {translation.games.steamCta}
+      </a>
     </div>
   </div>
 </article>

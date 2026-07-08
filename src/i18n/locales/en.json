@@ -65,11 +65,9 @@
       "accent": "partnership opportunities, please contact us using the studio's business email",
       "after": "."
     },
-    "ceoParagraph": "If you'd like to reach the CEO directly, you can also use the personal contact address below.",
+    "ceoParagraph": "If you'd like to reach the CEO directly, you can also use the personal contact email.",
     "studioEmailLabel": "Studio Business Email",
-    "ceoLabel": "CEO",
-    "addressLabel": "Address",
-    "addressPlaceholder": "1 Example Street, Shibuya, Tokyo 123-4567, Japan"
+    "ceoLabel": "CEO"
   },
   "media": {
     "gameArtworkAlt": "INFOGRIND key art featuring a futuristic armored character",

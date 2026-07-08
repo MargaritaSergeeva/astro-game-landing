@@ -21,32 +21,16 @@ const items = [
   {
     items.map((item) => (
       <li>
-        {item.url ? (
-          <a
-            class:list={['social-links__control', `social-links__control--${item.id}`]}
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={item.label}
-          >
-            <img src={item.icon.src} alt="" width="24" height="24" />
-            {expandable && <span>{item.label}</span>}
-          </a>
-        ) : (
-          <span
-            class:list={[
-              'social-links__control',
-              `social-links__control--${item.id}`,
-              'social-links__control--disabled',
-            ]}
-            aria-label={`${item.label} — link coming soon`}
-            aria-disabled="true"
-            role="img"
-          >
-            <img src={item.icon.src} alt="" width="24" height="24" />
-            {expandable && <span>{item.label}</span>}
-          </span>
-        )}
+        <a
+          class:list={['social-links__control', `social-links__control--${item.id}`]}
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={item.label}
+        >
+          <img src={item.icon.src} alt="" width="24" height="24" />
+          {expandable && <span>{item.label}</span>}
+        </a>
       </li>
     ))
   }
