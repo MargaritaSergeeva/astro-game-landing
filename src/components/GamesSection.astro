@@ -1,0 +1,80 @@
+---
+import type { Translations } from '../i18n/loader';
+import GameCard from './GameCard.astro';
+import SectionMarker from './SectionMarker.astro';
+
+interface Props {
+  translation: Translations;
+}
+
+const { translation } = Astro.props;
+---
+
+<section
+  class="games-section swiper-slide"
+  id="games"
+  data-section="games"
+  aria-labelledby="games-title"
+>
+  <div class="games-section__inner container">
+    <SectionMarker index={translation.games.index} title={translation.games.title} />
+    <h2 class="sr-only" id="games-title">{translation.games.title}</h2>
+    <GameCard translation={translation} />
+  </div>
+</section>
+
+<style>
+  .games-section {
+    min-height: 100dvh;
+    padding-block: 140px 80px;
+    overflow: hidden;
+    scroll-margin-top: 84px;
+  }
+
+  .games-section__inner {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 46px;
+    min-height: calc(100dvh - 220px);
+  }
+
+  @media (width >= 1024px) {
+    .games-section {
+      height: 100dvh;
+      min-height: 0;
+      padding-block: var(--section-padding-top-fluid) var(--section-padding-bottom-large-fluid);
+    }
+
+    .games-section__inner {
+      gap: var(--section-gap-fluid);
+      height: 100%;
+      min-height: 0;
+    }
+  }
+
+  @media (768px <= width <= 1023px) {
+    .games-section {
+      padding-block: 112px 40px;
+      overflow: visible;
+    }
+
+    .games-section__inner {
+      display: block;
+      min-height: 0;
+    }
+  }
+
+  @media (width <= 767px) {
+    .games-section {
+      min-height: 0;
+      padding-block: 28px 24px;
+      overflow: visible;
+      background: var(--color-background);
+    }
+
+    .games-section__inner {
+      display: block;
+      min-height: 0;
+    }
+  }
+</style>

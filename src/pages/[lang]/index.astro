@@ -1,5 +1,15 @@
 ---
-import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
+import 'swiper/css';
+import 'swiper/css/pagination';
+
+import gameArtwork from '../../assets/images/image-game.webp';
+import ogArtwork from '../../assets/images/og.jpg';
+import AboutSection from '../../components/AboutSection.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import GamesSection from '../../components/GamesSection.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import { siteConfig } from '../../config/site';
 import { supportedLocales, type Locale } from '../../i18n/config';
 import { getTranslations } from '../../i18n/loader';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -17,16 +27,107 @@ interface Props {
 
 const { locale } = Astro.props;
 const translation = getTranslations(locale);
+const noindex = import.meta.env.SITE_NOINDEX === 'true';
+const pageUrl = new URL(`/${locale}/`, Astro.site ?? Astro.url.origin);
+const imageUrl = new URL(gameArtwork.src, pageUrl);
+const ogImageUrl = new URL(ogArtwork.src, pageUrl);
+const sameAs = Object.values(siteConfig.socialLinks).filter(Boolean);
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${pageUrl.origin}/#organization`,
+    name: siteConfig.name,
+    url: pageUrl.origin,
+    email: siteConfig.studioEmail,
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${pageUrl.toString()}#webpage`,
+    url: pageUrl.toString(),
+    name: translation.seo.title,
+    description: translation.seo.description,
+    inLanguage: locale,
+    publisher: { '@id': `${pageUrl.origin}/#organization` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'VideoGame',
+    '@id': `${pageUrl.origin}/#infogrind`,
+    name: siteConfig.gameName,
+    description: translation.games.description.join(' '),
+    image: imageUrl.toString(),
+    genre: translation.games.genres,
+    inLanguage: locale,
+    author: { '@id': `${pageUrl.origin}/#organization` },
+  },
+];
 ---
 
-<BaseLayout locale={locale} title={translation.seo.title} description={translation.seo.description}>
-  <main id="home">
-    <p>{translation.home.eyebrow}</p>
-    <h1>{translation.home.title}</h1>
-    <LanguageSwitcher
-      currentLocale={locale}
-      label={translation.common.languageSwitcherLabel}
-      currentSection="home"
-    />
+<BaseLayout
+  locale={locale}
+  title={translation.seo.title}
+  description={translation.seo.description}
+  skipLabel={translation.common.skipToContent}
+  structuredData={structuredData}
+  ogImage={ogImageUrl}
+  ogImageAlt={`${siteConfig.name} — ${siteConfig.gameName}`}
+  ogImageWidth={1200}
+  ogImageHeight={630}
+  noindex={noindex}
+>
+  <Fragment slot="head">
+    <script is:inline>
+      (() => {
+        const sections = ['home', 'games', 'about', 'contacts'];
+        const section = window.location.hash.slice(1);
+        const index = Math.max(0, sections.indexOf(section));
+        document.documentElement.style.setProperty('--initial-slide-offset', `${index * -100}%`);
+      })();
+    </script>
+  </Fragment>
+  <Header locale={locale} translation={translation} />
+  <main class="main-slider swiper swiper-vertical" data-main-slider>
+    <div class="main-slider__wrapper swiper-wrapper">
+      <Hero translation={translation} />
+      <GamesSection translation={translation} />
+      <AboutSection translation={translation} />
+      <ContactSection translation={translation} />
+    </div>
   </main>
 </BaseLayout>
+
+<script>
+  import '../../scripts/main-slider';
+</script>
+
+<style>
+  .main-slider,
+  .main-slider__wrapper {
+    width: 100%;
+  }
+
+  .main-slider__wrapper {
+    height: 100%;
+    transform: translate3d(0, var(--initial-slide-offset, 0%), 0);
+  }
+
+  .main-slider {
+    height: 100dvh;
+  }
+
+  @media (width <= 1023px) {
+    .main-slider {
+      height: auto;
+      overflow: visible;
+    }
+
+    .main-slider__wrapper {
+      display: block;
+      height: auto;
+      transform: none;
+    }
+  }
+</style>

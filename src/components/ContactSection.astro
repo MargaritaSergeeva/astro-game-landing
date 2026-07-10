@@ -1,0 +1,230 @@
+---
+import contactWord from '../assets/icons/contact.svg';
+import { siteConfig } from '../config/site';
+import type { Translations } from '../i18n/loader';
+import SectionMarker from './SectionMarker.astro';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  translation: Translations;
+}
+
+const { translation } = Astro.props;
+---
+
+<section
+  class="contact-section swiper-slide"
+  id="contacts"
+  data-section="contacts"
+  aria-labelledby="contact-title"
+>
+  <div class="contact-section__inner container">
+    <SectionMarker index={translation.contact.index} title={translation.navigation.contact} />
+    <h2 class="sr-only" id="contact-title">{translation.contact.title}</h2>
+
+    <a class="contact-section__studio-email" href={`mailto:${siteConfig.studioEmail}`}>
+      {siteConfig.studioEmail}
+    </a>
+
+    <div class="contact-section__details">
+      <div class="contact-section__ceo">
+        <span>{translation.contact.ceoLabel}</span>
+        <a href={`mailto:${siteConfig.ceoEmail}`}>{siteConfig.ceoEmail}</a>
+      </div>
+
+      <div class="contact-section__copy">
+        <p>{translation.contact.introParagraph}</p>
+        <div class="contact-section__copy-followup">
+          <p>
+            {translation.contact.businessParagraph.before}<span
+              >{translation.contact.businessParagraph.accent}</span
+            >{translation.contact.businessParagraph.after}
+          </p>
+          <p>{translation.contact.ceoParagraph}</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="contact-section__footer">
+      <SocialLinks class="contact-section__socials" />
+      <p class="contact-section__copyright">© {siteConfig.currentYear} {siteConfig.name}</p>
+      <img class="contact-section__word" src={contactWord.src} alt="" aria-hidden="true" />
+    </footer>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    min-height: 100dvh;
+    padding-block: 140px 0;
+    overflow: hidden;
+    scroll-margin-top: 84px;
+  }
+
+  .contact-section__inner {
+    position: relative;
+    min-height: calc(100dvh - 140px);
+  }
+
+  .contact-section__studio-email {
+    display: block;
+    margin-top: clamp(28px, 5.948dvh, 64px);
+    font-size: clamp(56px, min(6.7vw, 11.896dvh), var(--type-contact-email-size));
+    font-weight: var(--font-weight-medium);
+    line-height: 1.06;
+    color: var(--color-accent);
+    overflow-wrap: anywhere;
+  }
+
+  .contact-section__details {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    margin-top: clamp(36px, 8.178dvh, 88px);
+  }
+
+  .contact-section__ceo {
+    display: grid;
+    gap: clamp(10px, 2.045dvh, 22px);
+    align-content: start;
+  }
+
+  .contact-section__ceo span,
+  .contact-section__copy {
+    font-size: clamp(16px, min(1.25vw, 2.23dvh), 24px);
+    line-height: 1.35;
+    color: var(--color-text-muted);
+  }
+
+  .contact-section__ceo a {
+    font-size: clamp(18px, min(1.45vw, 2.602dvh), 28px);
+    line-height: 1.35;
+  }
+
+  .contact-section__copy {
+    display: grid;
+    gap: clamp(12px, 2.602dvh, 28px);
+  }
+
+  .contact-section__copy-followup span {
+    color: var(--color-accent);
+  }
+
+  .contact-section__copyright {
+    display: none;
+  }
+
+  .contact-section__word {
+    position: absolute;
+    right: 0;
+    bottom: clamp(-84px, -7.807dvh, -40px);
+    left: 0;
+    width: min(100%, 163.569dvh);
+    height: auto;
+    margin-inline: auto;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+
+  @media (width >= 1024px) {
+    .contact-section {
+      height: 100dvh;
+      min-height: 0;
+      padding-top: var(--section-padding-top-fluid);
+    }
+
+    .contact-section__inner {
+      height: 100%;
+      min-height: 0;
+    }
+
+    .contact-section__word {
+      position: absolute;
+      right: 0;
+      bottom: -5px;
+      left: 0;
+      display: block;
+      width: min(100%, 163.569dvh);
+      height: auto;
+      margin-inline: auto;
+      pointer-events: none;
+      opacity: 0.9;
+    }
+  }
+
+  @media (width <= 1023px) {
+    .contact-section {
+      height: auto;
+      min-height: 0;
+      padding-block: 112px 0;
+      overflow: hidden;
+    }
+
+    .contact-section__inner {
+      min-height: 0;
+      padding-bottom: 72px;
+    }
+
+    .contact-section__studio-email {
+      margin-top: 32px;
+    }
+
+    .contact-section__details {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      margin-top: 34px;
+    }
+
+    .contact-section__ceo {
+      gap: 10px;
+    }
+
+    .contact-section__copy {
+      gap: 24px;
+    }
+
+    .contact-section__copyright {
+      display: block;
+      margin-top: 36px;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    .contact-section__word {
+      right: auto;
+      bottom: -2px;
+      left: 50%;
+      display: block;
+      width: 100vw;
+      max-width: 540px;
+      margin-inline: 0;
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (width <= 767px) {
+    .contact-section {
+      padding-block: 24px 0;
+    }
+
+    .contact-section__studio-email {
+      margin-top: 0;
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .contact-section__ceo span,
+    .contact-section__copy {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .contact-section__ceo a {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+</style>

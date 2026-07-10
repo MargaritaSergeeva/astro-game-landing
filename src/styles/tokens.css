@@ -1,10 +1,17 @@
 @import url('@fontsource-variable/inter/wght.css');
-@import url('@fontsource-variable/noto-sans-jp/wght.css');
+
+@font-face {
+  font-family: 'Object Sans';
+  font-style: normal;
+  font-weight: 900;
+  src: url('../assets/fonts/object-sans-heavy.woff2') format('woff2');
+  font-display: swap;
+}
 
 :root {
   --font-sans:
-    'Inter Variable', 'Noto Sans JP Variable', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui,
-    -apple-system, 'BlinkMacSystemFont', 'Segoe UI', sans-serif;
+    'Inter Variable', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', system-ui, -apple-system,
+    'BlinkMacSystemFont', 'Segoe UI', sans-serif;
   --font-display: 'Object Sans', 'Inter Variable', system-ui, sans-serif;
 
   --font-weight-light: 300;
@@ -23,7 +30,6 @@
   --color-panel: rgb(15 15 15 / 50%);
   --color-border: #ffffff;
   --color-border-muted: rgb(255 255 255 / 50%);
-  --color-texture-base: #e1e1e1;
   --color-shadow: rgb(33 33 33 / 20%);
   --color-focus: #ffffff;
 
@@ -35,13 +41,11 @@
   --border-width-default: 1px;
   --border-width-accent: 2px;
   --control-height: 56px;
-  --icon-size: 24px;
   --social-size: 56px;
   --social-expanded-width: 149px;
-  --social-padding-inline: 16px;
   --social-content-gap: 10px;
-  --texture-opacity: 0.4;
-  --texture-wrapper-opacity: 0.5;
+
+  --header-height: 104px;
 
   --type-hero-size: 90px;
   --type-hero-line: 1;
@@ -53,22 +57,12 @@
   --type-stat-line: 88px;
   --type-lead-size: 32px;
   --type-lead-line: 44.8px;
-  --type-contact-label-size: 32px;
-  --type-contact-label-line: 44px;
   --type-eyebrow-size: 20px;
   --type-eyebrow-line: 28px;
   --type-nav-size: 16px;
   --type-nav-line: 24px;
-  --type-body-xl-size: 24px;
-  --type-body-xl-line: 32px;
-  --type-body-lg-size: 20px;
-  --type-body-lg-line: 28px;
   --type-body-md-size: 16px;
   --type-body-md-line: 24px;
-  --type-body-sm-size: 14px;
-  --type-body-sm-line: 20px;
-  --type-caption-size: 12px;
-  --type-caption-line: 16px;
   --type-chip-size: 12px;
   --type-chip-line: 16px;
 
@@ -80,6 +74,16 @@
   --motion-fast: 180ms;
   --motion-normal: 300ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (width >= 1024px) {
+  :root {
+    --section-padding-top-fluid: clamp(104px, 13.012dvh, 140px);
+    --section-padding-bottom-fluid: clamp(28px, 6.691dvh, 72px);
+    --section-padding-bottom-large-fluid: clamp(32px, 7.435dvh, 80px);
+    --section-gap-fluid: clamp(24px, 4.275dvh, 46px);
+    --control-height-fluid: clamp(44px, 5.205dvh, 56px);
+  }
 }
 
 @media (width <= 767px) {
@@ -94,12 +98,8 @@
     --type-stat-line: 44px;
     --type-lead-size: 16px;
     --type-lead-line: 24px;
-    --type-contact-label-size: 16px;
-    --type-contact-label-line: 24px;
     --type-eyebrow-size: 14px;
     --type-eyebrow-line: 20px;
-    --type-body-xl-size: 16px;
-    --type-body-xl-line: 24px;
     --type-body-md-size: 14px;
     --type-body-md-line: 20px;
     --type-chip-size: 10px;

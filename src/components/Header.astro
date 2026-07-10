@@ -1,0 +1,367 @@
+---
+import closeIcon from '../assets/icons/close.svg';
+import logo from '../assets/icons/logo.svg';
+import mobileLogo from '../assets/icons/logo-mobile.svg';
+import miniLogo from '../assets/icons/mini-logo.svg';
+import menuIcon from '../assets/icons/menu.svg';
+import { siteConfig } from '../config/site';
+import type { Locale } from '../i18n/config';
+import type { Translations } from '../i18n/loader';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  locale: Locale;
+  translation: Translations;
+}
+
+const { locale, translation } = Astro.props;
+const navigation = [
+  { id: 'home', label: translation.navigation.home },
+  { id: 'games', label: translation.navigation.games },
+  { id: 'about', label: translation.navigation.about },
+  { id: 'contacts', label: translation.navigation.contact },
+];
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__inner container">
+    <a class="site-header__logo" href={`/${locale}/#home`} aria-label={siteConfig.name}>
+      <picture>
+        <source media="(max-width: 767px)" srcset={mobileLogo.src} />
+        <source media="(min-width: 768px) and (max-width: 1139px)" srcset={miniLogo.src} />
+        <img src={logo.src} alt={siteConfig.name} width="225" height="40" />
+      </picture>
+    </a>
+
+    <nav class="site-header__navigation" aria-label={translation.common.primaryNavigation}>
+      <ul>
+        {
+          navigation.map((item, index) => (
+            <li>
+              <a
+                class="site-header__navigation-link"
+                href={`#${item.id}`}
+                data-section-link
+                data-slide-index={index}
+                aria-current={index === 0 ? 'location' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <LanguageSwitcher
+        currentLocale={locale}
+        label={translation.common.languageSwitcherLabel}
+        currentSection="home"
+      />
+      <a class="site-header__contact" href="#contacts" data-section-link data-slide-index="3">
+        {translation.home.contactCta}
+      </a>
+    </div>
+
+    <button
+      class="site-header__menu-button"
+      type="button"
+      aria-label={translation.common.openMenu}
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-open
+    >
+      <img src={menuIcon.src} alt="" width="24" height="24" />
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+  <button
+    class="mobile-menu__close"
+    type="button"
+    aria-label={translation.common.closeMenu}
+    data-menu-close
+  >
+    <img src={closeIcon.src} alt="" width="24" height="24" />
+  </button>
+
+  <nav class="mobile-menu__navigation" aria-label={translation.common.primaryNavigation}>
+    <ul>
+      {
+        navigation.map((item, index) => (
+          <li>
+            <a href={`#${item.id}`} data-section-link data-slide-index={index}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="mobile-menu__contacts">
+    <div>
+      <span>{translation.contact.studioEmailLabel}</span>
+      <a href={`mailto:${siteConfig.studioEmail}`}>{siteConfig.studioEmail}</a>
+    </div>
+    <div>
+      <span>{translation.contact.ceoLabel}</span>
+      <a href={`mailto:${siteConfig.ceoEmail}`}>{siteConfig.ceoEmail}</a>
+    </div>
+  </div>
+
+  <div class="mobile-menu__footer">
+    <SocialLinks />
+    <LanguageSwitcher
+      currentLocale={locale}
+      label={translation.common.languageSwitcherLabel}
+      currentSection="home"
+      openUpward
+    />
+  </div>
+</div>
+
+<script>
+  import '../scripts/mobile-menu';
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 50;
+    height: var(--header-height);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .site-header__logo {
+    flex: none;
+  }
+
+  .site-header__logo picture {
+    display: block;
+  }
+
+  .site-header__logo img {
+    width: 225px;
+    height: 40px;
+  }
+
+  .site-header__navigation ul {
+    display: flex;
+    gap: clamp(42px, 5vw, 80px);
+    align-items: center;
+  }
+
+  .site-header__navigation-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 24px;
+    color: var(--color-nav-muted);
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .site-header__navigation-link::before,
+  .site-header__navigation-link::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    content: '';
+    opacity: 0;
+    transform: translateX(-50%);
+    transition: opacity var(--motion-fast) var(--ease-standard);
+  }
+
+  .site-header__navigation-link::before {
+    width: calc(100% + 28px);
+    border-top: 2px solid var(--color-text);
+  }
+
+  .site-header__navigation-link::after {
+    bottom: -3px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-text);
+    border-radius: 50%;
+  }
+
+  .site-header__navigation-link:hover,
+  .site-header__navigation-link[aria-current='location'] {
+    color: var(--color-text);
+  }
+
+  .site-header__navigation-link[aria-current='location']::before,
+  .site-header__navigation-link[aria-current='location']::after {
+    opacity: 1;
+  }
+
+  .site-header__actions {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .site-header__contact {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 166px;
+    height: 56px;
+    padding-inline: 24px;
+    font-size: 20px;
+    line-height: 28px;
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-control);
+    transition:
+      background-color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .site-header__contact:hover,
+  .site-header__contact:focus-visible {
+    background: var(--color-accent);
+  }
+
+  .site-header__menu-button {
+    display: none;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    min-width: 360px;
+    padding: 132px 16px 28px;
+    overflow-y: auto;
+    background: var(--color-background);
+  }
+
+  .mobile-menu[hidden] {
+    display: none;
+  }
+
+  .mobile-menu__close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    background: var(--color-control);
+    border-radius: 50%;
+  }
+
+  .mobile-menu__navigation ul {
+    display: grid;
+    gap: 40px;
+  }
+
+  .mobile-menu__navigation a {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: var(--font-weight-heavy);
+    line-height: 1;
+    color: var(--color-text);
+  }
+
+  .mobile-menu__contacts {
+    display: grid;
+    gap: 32px;
+    padding-top: 48px;
+    margin-top: auto;
+  }
+
+  .mobile-menu__contacts div {
+    display: grid;
+    gap: 10px;
+  }
+
+  .mobile-menu__contacts span {
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--color-text-muted);
+  }
+
+  .mobile-menu__contacts a {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .mobile-menu__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+  }
+
+  @media (width <= 1100px) {
+    .site-header__navigation ul {
+      gap: 30px;
+    }
+
+    .site-header__actions {
+      gap: 12px;
+    }
+
+    .site-header__contact {
+      min-width: 130px;
+      padding-inline: 16px;
+    }
+  }
+
+  @media (768px <= width < 1140px) {
+    .site-header__logo img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media (width <= 767px) {
+    .site-header {
+      position: absolute;
+      height: 84px;
+    }
+
+    .site-header__logo img {
+      width: 209px;
+      height: 24px;
+    }
+
+    .site-header__navigation,
+    .site-header__actions {
+      display: none;
+    }
+
+    .site-header__menu-button {
+      display: grid;
+      flex: none;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      background: var(--color-control);
+      border-radius: 50%;
+    }
+
+    .mobile-menu:not([hidden]) {
+      display: flex;
+    }
+  }
+</style>

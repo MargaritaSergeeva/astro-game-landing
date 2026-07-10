@@ -1,0 +1,103 @@
+---
+import discordIcon from '../assets/icons/discord.svg';
+import twitterIcon from '../assets/icons/twitter.svg';
+import youtubeIcon from '../assets/icons/youtube.svg';
+import { siteConfig } from '../config/site';
+
+interface Props {
+  expandable?: boolean;
+  class?: string;
+}
+
+const { expandable = false, class: className } = Astro.props;
+const items = [
+  { id: 'youtube', label: 'YouTube', icon: youtubeIcon, url: siteConfig.socialLinks.youtube },
+  { id: 'twitter', label: 'Twitter', icon: twitterIcon, url: siteConfig.socialLinks.twitter },
+  { id: 'discord', label: 'Discord', icon: discordIcon, url: siteConfig.socialLinks.discord },
+] as const;
+---
+
+<ul class:list={['social-links', { 'social-links--expandable': expandable }, className]}>
+  {
+    items.map((item) => (
+      <li>
+        <a
+          class:list={['social-links__control', `social-links__control--${item.id}`]}
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={item.label}
+        >
+          <img src={item.icon.src} alt="" width="24" height="24" />
+          {expandable && <span>{item.label}</span>}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .social-links {
+    display: flex;
+    gap: 34px;
+  }
+
+  .social-links__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--social-size);
+    height: var(--social-size);
+    overflow: hidden;
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-control);
+    border-radius: var(--radius-round);
+    transition: width var(--motion-fast) var(--ease-standard);
+  }
+
+  .social-links__control img {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .social-links--expandable {
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-end;
+  }
+
+  .social-links--expandable .social-links__control {
+    gap: var(--social-content-gap);
+    justify-content: flex-start;
+    padding-inline: 16px;
+  }
+
+  .social-links--expandable .social-links__control span {
+    width: 0;
+    overflow: hidden;
+    font-size: 16px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity var(--motion-fast) var(--ease-standard);
+  }
+
+  .social-links--expandable .social-links__control:hover,
+  .social-links--expandable .social-links__control:focus-visible {
+    width: var(--social-expanded-width);
+  }
+
+  .social-links--expandable .social-links__control:hover span,
+  .social-links--expandable .social-links__control:focus-visible span {
+    width: auto;
+    opacity: 1;
+  }
+
+  @media (width <= 767px) {
+    .social-links.hero__socials {
+      display: none;
+    }
+  }
+</style>

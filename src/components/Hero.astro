@@ -1,0 +1,233 @@
+---
+import robotMobile from '../assets/images/robot-mobile.webp';
+import robot from '../assets/images/robot.webp';
+import { siteConfig } from '../config/site';
+import type { Translations } from '../i18n/loader';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  translation: Translations;
+}
+
+const { translation } = Astro.props;
+---
+
+<section class="hero swiper-slide" id="home" data-section="home" aria-labelledby="hero-title">
+  <div class="hero__inner container">
+    <div class="hero__content">
+      <h1 class="sr-only" id="hero-title">{translation.seo.title}</h1>
+      <p class="hero__eyebrow"><span aria-hidden="true"></span>{translation.home.eyebrow}</p>
+      <h2 class="hero__title" aria-hidden="true">
+        <span>TWILIGHT</span><span>HAVEN</span>
+      </h2>
+      <div class="hero__intro">
+        {translation.home.intro.map((paragraph) => <p class="hero__lead">{paragraph}</p>)}
+      </div>
+      <a class="hero__cta" href="#games" data-section-link data-slide-index="1">
+        <span>{translation.home.gamesCta}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <picture class="hero__visual" aria-hidden="true">
+      <source media="(max-width: 767px)" srcset={robotMobile.src} />
+      <img src={robot.src} alt="" width="807" height="1024" fetchpriority="high" />
+    </picture>
+
+    <SocialLinks expandable class="hero__socials" />
+    <p class="hero__copyright">© {siteConfig.currentYear} {siteConfig.name}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: flex;
+    height: 100%;
+    min-height: 100dvh;
+    padding-top: var(--header-height);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    width: min(52vw, 900px);
+    margin-block: auto;
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: var(--type-eyebrow-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--type-eyebrow-line);
+    color: var(--color-accent);
+    text-transform: uppercase;
+  }
+
+  .hero__eyebrow span {
+    width: 8px;
+    height: 8px;
+    background: var(--color-text-muted);
+    border-radius: 50%;
+  }
+
+  .hero__title {
+    margin-top: clamp(24px, 3.903dvh, 42px);
+    font-family: var(--font-display);
+    font-size: clamp(52px, min(4.7vw, 8.365dvh), var(--type-hero-size));
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--type-hero-line);
+    white-space: nowrap;
+  }
+
+  .hero__title span:last-child {
+    color: var(--color-accent);
+  }
+
+  .hero__intro {
+    display: grid;
+    gap: clamp(8px, 1.487dvh, 16px);
+    max-width: 900px;
+    margin-top: clamp(18px, 3.16dvh, 34px);
+  }
+
+  .hero__lead {
+    font-size: clamp(16px, 1.859dvh, var(--type-eyebrow-size));
+    font-weight: var(--font-weight-light);
+    line-height: 1.4;
+    color: var(--color-text-muted);
+  }
+
+  .hero__cta {
+    display: inline-flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    min-width: 208px;
+    height: var(--control-height-fluid, 56px);
+    padding-inline: 28px;
+    margin-top: clamp(24px, 5.205dvh, 56px);
+    font-size: clamp(16px, 1.859dvh, 20px);
+    line-height: 28px;
+    background: var(--color-accent);
+    border-radius: var(--radius-control);
+    transition: background-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .hero__cta:hover,
+  .hero__cta:focus-visible {
+    background: var(--color-accent-dark);
+  }
+
+  .hero__visual {
+    position: absolute;
+    right: 5%;
+    bottom: 0;
+    z-index: 1;
+    width: min(42vw, 807px, 78.8dvh);
+  }
+
+  .hero__visual img {
+    width: 100%;
+    height: auto;
+  }
+
+  .hero__copyright {
+    position: absolute;
+    bottom: clamp(24px, 7.063dvh, 76px);
+    left: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-text-muted);
+  }
+
+  @media (width <= 1024px) {
+    .hero__copyright {
+      bottom: 26px;
+    }
+  }
+
+  @media (width <= 767px) {
+    .hero {
+      min-height: 590px;
+    }
+
+    .hero__inner {
+      display: block;
+      height: auto;
+      min-height: 590px;
+      padding-top: 0;
+      padding-bottom: 32px;
+    }
+
+    .hero__inner::after {
+      position: absolute;
+      inset: 200px calc((100vw - 100%) / -2) 0;
+      z-index: 1;
+      pointer-events: none;
+      content: '';
+      background: linear-gradient(180deg, rgb(15 15 15 / 0%) 0%, var(--color-background) 62%);
+    }
+
+    .hero__content {
+      width: 100%;
+      padding-top: 316px;
+      margin-block: 0;
+    }
+
+    .hero__eyebrow {
+      display: block;
+      font-size: 14px;
+      font-weight: var(--font-weight-light);
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .hero__eyebrow span {
+      display: none;
+    }
+
+    .hero__title {
+      margin-top: 14px;
+      font-size: clamp(32px, 10vw, 36px);
+      white-space: nowrap;
+    }
+
+    .hero__intro {
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .hero__lead {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .hero__cta {
+      width: 100%;
+      height: 56px;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    .hero__visual {
+      top: 42px;
+      right: calc((100vw - 100%) / -2);
+      bottom: auto;
+      z-index: 0;
+      width: 214px;
+    }
+
+    .hero__copyright {
+      display: none;
+    }
+  }
+</style>

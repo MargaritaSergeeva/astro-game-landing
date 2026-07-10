@@ -1,0 +1,43 @@
+# Dependencies & build output
+node_modules/
+dist/
+
+# Yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.cache/
+
+# Secrets — .env is intentionally included: CI copies the env file
+# before docker build so Astro/Vite can read it during the build stage
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI/CD & docs
+.gitlab-ci.yml
+README.md
+
+# Linter caches
+.eslintcache

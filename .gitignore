@@ -11,11 +11,6 @@ node_modules/
 dist/
 .cache/
 
-# Test and coverage output
-coverage/
-playwright-report/
-test-results/
-
 # Local environment files
 .env
 .env.*

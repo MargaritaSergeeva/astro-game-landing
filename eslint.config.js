@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import astro from 'eslint-plugin-astro';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
@@ -11,12 +12,14 @@ export default defineConfig([
   tseslint.configs.recommended,
   astro.configs.recommended,
   {
-    files: ['scripts/**/*.mjs'],
+    files: ['src/scripts/**/*.ts'],
     languageOptions: {
-      globals: {
-        console: 'readonly',
-        process: 'readonly',
-      },
+      globals: globals.browser,
+    },
+  },
+  {
+    rules: {
+      curly: ['error', 'all'],
     },
   },
 ]);
