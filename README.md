@@ -58,13 +58,15 @@ yarn build
 
 Основные переменные:
 
-- `SITE_URL` — домен сайта обязательно нужен для canonical, sitemap и OG-ссылок.
-- `SITE_NOINDEX=true` — закрывает сборку от индексации поисковиками. Используется для тестового домена.
+- `SITE_URL` — обязательный абсолютный URL сайта для canonical, sitemap и OG-ссылок.
+- `SITE_NOINDEX` — обязательное значение `true` или `false`; `true` закрывает тестовую сборку от индексации.
+
+Сборка завершится ошибкой, если одна из переменных отсутствует или имеет неверный формат.
 
 Пример production-сборки:
 
 ```bash
-SITE_URL=https://example.com yarn build
+SITE_URL=https://example.com SITE_NOINDEX=false yarn build
 ```
 
 Пример test/staging-сборки:

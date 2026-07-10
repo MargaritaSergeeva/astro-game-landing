@@ -78,7 +78,7 @@ const gallerySlides = slides.map((slide, index) => ({
                     data-gallery-open
                     data-gallery-index={index}
                     style={`--gallery-zoom-icon: url("${searchIcon.src}");`}
-                    aria-label={`Open full-size image: ${alt}`}
+                    aria-label={`${translation.common.openFullSizeImage}: ${alt}`}
                   >
                     <img
                       class="about-gallery__image"
@@ -110,12 +110,12 @@ const gallerySlides = slides.map((slide, index) => ({
     </div>
   </div>
 
-  <dialog class="about-lightbox" data-gallery-modal aria-label="Full-size gallery image">
+  <dialog class="about-lightbox" data-gallery-modal aria-label={translation.common.fullSizeGallery}>
     <button
       class="about-lightbox__close"
       type="button"
       data-gallery-modal-close
-      aria-label="Close"
+      aria-label={translation.common.closeGallery}
       style={`--lightbox-close-icon: url("${closeIcon.src}");`}
     >
       <span aria-hidden="true"></span>
@@ -125,7 +125,7 @@ const gallerySlides = slides.map((slide, index) => ({
         class="about-lightbox__nav about-lightbox__nav--prev"
         type="button"
         data-gallery-modal-prev
-        aria-label="Previous image"
+        aria-label={translation.common.previousImage}
       >
         <span aria-hidden="true"></span>
       </button>
@@ -150,7 +150,7 @@ const gallerySlides = slides.map((slide, index) => ({
         class="about-lightbox__nav about-lightbox__nav--next"
         type="button"
         data-gallery-modal-next
-        aria-label="Next image"
+        aria-label={translation.common.nextImage}
       >
         <span aria-hidden="true"></span>
       </button>

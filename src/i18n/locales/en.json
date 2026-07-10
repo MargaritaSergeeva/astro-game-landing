@@ -13,8 +13,14 @@
   "common": {
     "languageSwitcherLabel": "Choose language",
     "skipToContent": "Skip to content",
+    "primaryNavigation": "Primary navigation",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "openFullSizeImage": "Open full-size image",
+    "fullSizeGallery": "Full-size image gallery",
+    "closeGallery": "Close gallery",
+    "previousImage": "Previous image",
+    "nextImage": "Next image"
   },
   "home": {
     "eyebrow": "Independent Game Development Studio",

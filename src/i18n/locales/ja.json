@@ -13,8 +13,14 @@
   "common": {
     "languageSwitcherLabel": "言語を選択",
     "skipToContent": "本文へ移動",
+    "primaryNavigation": "メインナビゲーション",
     "openMenu": "メニューを開く",
-    "closeMenu": "メニューを閉じる"
+    "closeMenu": "メニューを閉じる",
+    "openFullSizeImage": "フルサイズ画像を開く",
+    "fullSizeGallery": "フルサイズ画像ギャラリー",
+    "closeGallery": "ギャラリーを閉じる",
+    "previousImage": "前の画像",
+    "nextImage": "次の画像"
   },
   "home": {
     "eyebrow": "インディーゲーム開発スタジオ",

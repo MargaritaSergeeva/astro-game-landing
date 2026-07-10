@@ -98,9 +98,10 @@ const localeMap: Record<Locale, string> = {
     {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {
-      structuredData.map((item) => (
-        <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />
-      ))
+      !noindex &&
+        structuredData.map((item) => (
+          <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />
+        ))
     }
     <slot name="head" />
   </head>

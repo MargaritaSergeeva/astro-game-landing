@@ -13,8 +13,14 @@
   "common": {
     "languageSwitcherLabel": "Выбрать язык",
     "skipToContent": "Перейти к содержимому",
+    "primaryNavigation": "Основная навигация",
     "openMenu": "Открыть меню",
-    "closeMenu": "Закрыть меню"
+    "closeMenu": "Закрыть меню",
+    "openFullSizeImage": "Открыть изображение в полном размере",
+    "fullSizeGallery": "Галерея полноразмерных изображений",
+    "closeGallery": "Закрыть галерею",
+    "previousImage": "Предыдущее изображение",
+    "nextImage": "Следующее изображение"
   },
   "home": {
     "eyebrow": "Независимая студия разработки игр",

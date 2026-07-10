@@ -18,8 +18,7 @@ const { translation } = Astro.props;
       alt={translation.media.gameArtworkAlt}
       width="864"
       height="791"
-      loading="eager"
-      fetchpriority="high"
+      loading="lazy"
     />
     <span class="game-card__corner game-card__corner--top" aria-hidden="true"></span>
     <span class="game-card__corner game-card__corner--bottom" aria-hidden="true"></span>
@@ -31,7 +30,7 @@ const { translation } = Astro.props;
       {translation.games.genres.map((genre) => <li>{genre}</li>)}
     </ul>
     <p class="game-card__status">{translation.games.status}</p>
-    <h2>{siteConfig.gameName}</h2>
+    <h3>{siteConfig.gameName}</h3>
     <div class="game-card__rule"></div>
     <div class="game-card__description">
       {translation.games.description.map((paragraph) => <p>{paragraph}</p>)}
@@ -143,7 +142,7 @@ const { translation } = Astro.props;
     text-transform: uppercase;
   }
 
-  .game-card h2 {
+  .game-card h3 {
     margin-top: clamp(12px, 2.23dvh, 24px);
     font-family: var(--font-display);
     font-size: clamp(40px, min(3.4vw, 5.948dvh), 64px);
@@ -243,7 +242,7 @@ const { translation } = Astro.props;
       margin-top: 8px;
     }
 
-    .game-card h2 {
+    .game-card h3 {
       margin-top: 8px;
     }
 
@@ -318,7 +317,7 @@ const { translation } = Astro.props;
       line-height: 16px;
     }
 
-    .game-card h2 {
+    .game-card h3 {
       margin-top: 12px;
       font-size: 32px;
     }
