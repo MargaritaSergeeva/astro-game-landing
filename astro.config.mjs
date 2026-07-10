@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import 'dotenv/config';
 import process from 'node:process';
 import { URL } from 'node:url';
 
