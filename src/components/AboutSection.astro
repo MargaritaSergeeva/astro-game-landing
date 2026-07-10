@@ -1,5 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
+import closeIcon from '../assets/icons/close.svg';
+import searchIcon from '../assets/icons/search.svg';
 import { siteConfig } from '../config/site';
 import type { Translations } from '../i18n/loader';
 import SectionMarker from './SectionMarker.astro';
@@ -9,11 +11,25 @@ interface Props {
 }
 
 const { translation } = Astro.props;
-const slides = Object.entries(
-  import.meta.glob<{ default: ImageMetadata }>('../assets/slider/*.webp', { eager: true }),
-)
-  .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
-  .map(([, module]) => module.default);
+const getSortedImages = (modules: Record<string, { default: ImageMetadata }>) =>
+  Object.entries(modules)
+    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+    .map(([, module]) => module.default);
+const slides = getSortedImages(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/slider/*.webp', {
+    eager: true,
+  }),
+);
+const largeSlides = getSortedImages(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/slider/big-slides/*.webp', {
+    eager: true,
+  }),
+);
+const gallerySlides = slides.map((slide, index) => ({
+  alt: translation.media.galleryAlt[index],
+  largeSrc: largeSlides[index]?.src,
+  slide,
+}));
 ---
 
 <section
@@ -54,15 +70,25 @@ const slides = Object.entries(
         >
           <div class="about-gallery__wrapper swiper-wrapper">
             {
-              slides.map((slide, index) => (
+              gallerySlides.map(({ alt, slide }, index) => (
                 <div class="about-gallery__slide swiper-slide">
-                  <img
-                    src={slide.src}
-                    alt={translation.media.galleryAlt[index]}
-                    width="800"
-                    height="450"
-                    loading="lazy"
-                  />
+                  <button
+                    class="about-gallery__open"
+                    type="button"
+                    data-gallery-open
+                    data-gallery-index={index}
+                    style={`--gallery-zoom-icon: url("${searchIcon.src}");`}
+                    aria-label={`Open full-size image: ${alt}`}
+                  >
+                    <img
+                      class="about-gallery__image"
+                      src={slide.src}
+                      alt={alt}
+                      width="800"
+                      height="450"
+                      loading="lazy"
+                    />
+                  </button>
                 </div>
               ))
             }
@@ -75,12 +101,61 @@ const slides = Object.entries(
           ></span>
           <span class="about-gallery__corner about-gallery__corner--bottom-right" aria-hidden="true"
           ></span>
-          <p class="about-gallery__counter" aria-live="polite" data-gallery-counter>01 / 09</p>
+          <p class="about-gallery__counter" aria-live="polite" data-gallery-counter>
+            01 / {String(gallerySlides.length).padStart(2, '0')}
+          </p>
         </div>
         <div class="about-gallery__pagination" data-gallery-pagination></div>
       </div>
     </div>
   </div>
+
+  <dialog class="about-lightbox" data-gallery-modal aria-label="Full-size gallery image">
+    <button
+      class="about-lightbox__close"
+      type="button"
+      data-gallery-modal-close
+      aria-label="Close"
+      style={`--lightbox-close-icon: url("${closeIcon.src}");`}
+    >
+      <span aria-hidden="true"></span>
+    </button>
+    <div class="about-lightbox__stage">
+      <button
+        class="about-lightbox__nav about-lightbox__nav--prev"
+        type="button"
+        data-gallery-modal-prev
+        aria-label="Previous image"
+      >
+        <span aria-hidden="true"></span>
+      </button>
+      <div class="about-lightbox__frame swiper" data-gallery-modal-slider>
+        <div class="about-lightbox__wrapper swiper-wrapper">
+          {
+            gallerySlides.map(({ alt, largeSrc, slide }) => (
+              <div class="about-lightbox__slide swiper-slide">
+                <img
+                  data-gallery-modal-image
+                  data-gallery-large-src={largeSrc}
+                  data-gallery-mobile-src={slide.src}
+                  alt={alt}
+                  loading="lazy"
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <button
+        class="about-lightbox__nav about-lightbox__nav--next"
+        type="button"
+        data-gallery-modal-next
+        aria-label="Next image"
+      >
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </dialog>
 </section>
 
 <script>
@@ -197,7 +272,51 @@ const slides = Object.entries(
     height: 100%;
   }
 
-  .about-gallery__slide img {
+  .about-gallery__open {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    cursor: zoom-in;
+    background: transparent;
+    border: 0;
+  }
+
+  .about-gallery__open::before,
+  .about-gallery__open::after {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    content: '';
+    opacity: 0;
+    transition: opacity 360ms var(--ease-standard);
+  }
+
+  .about-gallery__open::before {
+    inset: 0;
+    background: rgb(15 15 15 / 42%);
+  }
+
+  .about-gallery__open::after {
+    top: 50%;
+    left: 50%;
+    width: 54px;
+    height: 54px;
+    background-color: var(--color-accent);
+    mask: var(--gallery-zoom-icon) center / contain no-repeat;
+    transform: translate(-50%, -50%);
+  }
+
+  .about-gallery__open:hover::before,
+  .about-gallery__open:hover::after,
+  .about-gallery__open:focus-visible::before,
+  .about-gallery__open:focus-visible::after {
+    opacity: 1;
+  }
+
+  .about-gallery__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -250,6 +369,121 @@ const slides = Object.entries(
     display: none;
   }
 
+  .about-lightbox {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    padding: clamp(56px, 7dvh, 88px) clamp(24px, 5vw, 96px) clamp(32px, 5dvh, 72px);
+    color: var(--color-text);
+    background: rgb(15 15 15 / 92%);
+    border: 0;
+  }
+
+  .about-lightbox::backdrop {
+    background: rgb(0 0 0 / 78%);
+  }
+
+  .about-lightbox[open] {
+    display: block;
+  }
+
+  .about-lightbox__close {
+    position: fixed;
+    top: clamp(16px, 1.6vw, 28px);
+    right: clamp(16px, 1.6vw, 28px);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-control);
+    border: 0;
+    border-radius: 50%;
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .about-lightbox__close span {
+    width: 24px;
+    height: 24px;
+    background-color: currentcolor;
+    mask: var(--lightbox-close-icon) center / contain no-repeat;
+  }
+
+  .about-lightbox__stage {
+    position: relative;
+    width: min(100%, 1600px);
+    height: min(100%, 90dvh);
+    max-height: calc(100dvh - clamp(112px, 14dvh, 160px));
+    margin: auto;
+  }
+
+  .about-lightbox__frame {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-border-muted);
+  }
+
+  .about-lightbox__wrapper,
+  .about-lightbox__slide {
+    height: 100%;
+  }
+
+  .about-lightbox__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    color: var(--color-text);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    transform: translateY(-50%);
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .about-lightbox__nav span {
+    width: 34px;
+    height: 34px;
+    border-top: 3px solid currentcolor;
+    border-left: 3px solid currentcolor;
+  }
+
+  .about-lightbox__nav:hover,
+  .about-lightbox__nav:focus-visible {
+    color: var(--color-accent);
+    outline: none;
+  }
+
+  .about-lightbox__nav--prev {
+    left: clamp(-80px, -4vw, -48px);
+  }
+
+  .about-lightbox__nav--prev span {
+    transform: rotate(-45deg);
+  }
+
+  .about-lightbox__nav--next {
+    right: clamp(-80px, -4vw, -48px);
+  }
+
+  .about-lightbox__nav--next span {
+    transform: rotate(135deg);
+  }
+
   @media (width >= 1024px) {
     .about-section {
       height: 100dvh;
@@ -266,6 +500,12 @@ const slides = Object.entries(
     .about-section__layout {
       height: 100%;
       min-height: 0;
+    }
+
+    .about-lightbox__close:hover,
+    .about-lightbox__close:focus-visible {
+      color: var(--color-accent);
+      outline: none;
     }
   }
 
@@ -411,6 +651,64 @@ const slides = Object.entries(
       font-size: 12px;
       line-height: 16px;
       background: rgb(15 15 15 / 70%);
+    }
+
+    .about-gallery__open {
+      cursor: grab;
+    }
+
+    .about-gallery__open::before,
+    .about-gallery__open::after {
+      display: none;
+    }
+
+    .about-lightbox {
+      align-items: center;
+      justify-content: center;
+      padding: 72px 16px 40px;
+    }
+
+    .about-lightbox__close:focus-visible {
+      color: var(--color-text);
+      outline: none;
+    }
+
+    .about-lightbox[open] {
+      display: flex;
+    }
+
+    .about-lightbox__stage {
+      width: 100%;
+      height: auto;
+      max-height: calc(100dvh - 104px);
+      aspect-ratio: 16 / 9;
+      margin: 0;
+    }
+
+    .about-lightbox__nav {
+      top: 50%;
+      bottom: auto;
+      width: 48px;
+      height: 48px;
+      transform: translateY(-50%);
+    }
+
+    .about-lightbox__nav span {
+      width: 24px;
+      height: 24px;
+      border-width: 2px;
+    }
+
+    .about-lightbox__slide img {
+      object-fit: contain;
+    }
+
+    .about-lightbox__nav--prev {
+      left: 6px;
+    }
+
+    .about-lightbox__nav--next {
+      right: 6px;
     }
   }
 </style>

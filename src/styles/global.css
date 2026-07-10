@@ -142,6 +142,10 @@ body[data-menu-open='true'] {
   overflow: hidden;
 }
 
+body[data-gallery-modal-open='true'] {
+  overflow: hidden;
+}
+
 @media (width >= 768px) {
   .container {
     width: min(100% - 80px, 1760px);
