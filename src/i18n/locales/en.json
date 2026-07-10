@@ -12,16 +12,18 @@
   },
   "common": {
     "languageSwitcherLabel": "Choose language",
+    "skipToContent": "Skip to content",
+    "primaryNavigation": "Primary navigation",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "previousSlide": "Previous slide",
-    "nextSlide": "Next slide",
-    "slideStatus": "Slide {{current}} of {{total}}"
+    "openFullSizeImage": "Open full-size image",
+    "fullSizeGallery": "Full-size image gallery",
+    "closeGallery": "Close gallery",
+    "previousImage": "Previous image",
+    "nextImage": "Next image"
   },
   "home": {
-    "index": "01",
     "eyebrow": "Independent Game Development Studio",
-    "title": "TWILIGHTHAVEN",
     "intro": [
       "We create games that are full of atmospheric experiences where every choice shapes your journey, every corner conceals a new story, and exploration is rewarded.",
       "Our mission is to build worlds that invite players to lose themselves for hours—and leave them with questions worth discussing long after the adventure ends.",
@@ -33,7 +35,6 @@
   "games": {
     "index": "02",
     "title": "Our Games",
-    "intro": "Every game we create is part of a shared universe that continues growing and evolving with each new project.",
     "status": "Steam Demo Available",
     "description": [
       "In the aftermath of a global Cataclysm, you take on the role of the Director of the Bank, an organization entrusted with safeguarding dangerous anomalous artifacts and the knowledge of the old world.",
@@ -47,33 +48,36 @@
   "about": {
     "index": "03",
     "title": "About Us",
+    "displayTitle": "WE CREATE",
+    "displayTitleAccent": "GAMES",
     "paragraphs": [
-      "TWILIGHTHAVEN is an independent game studio with five developers, united by a shared vision of creating an original game universe.",
+      "TWILIGHTHAVEN is an independent game studio with a team of more than nine people, united by a shared vision of creating an original game universe.",
       "Our games take place in a world forever changed by a global Cataclysm. A dark neo-cyberpunk future where powerful corporations compete for control, and advanced technology exists alongside inexplicable anomalies.",
       "We believe memorable worlds are built on more than gameplay alone. Every character, document, legend, and hidden story helps bring the setting to life, rewarding players who choose to dig deeper.",
       "INFOGRIND is only the beginning. As the universe grows, future games will explore new regions, introduce new factions, and reveal more of its history, mysteries, and lore.",
       "Our goal is to create immersive worlds and compelling stories that players will want to revisit long after they've finished playing."
     ],
-    "teamLabel": "Developers",
-    "teamValue": "5",
+    "teamLabel": "People on the team",
+    "teamValue": "9+",
+    "foundedLabel": "Founded",
     "galleryLabel": "INFOGRIND gallery"
   },
   "contact": {
     "index": "04",
     "title": "Get in Touch",
-    "paragraphs": [
-      "We're always happy to hear from players, journalists, content creators, and potential partners.",
-      "For business inquiries, publishing opportunities, investment proposals, media requests, or other partnership opportunities, please contact us using the studio's business email.",
-      "If you'd like to reach the CEO directly, you can also use the personal contact address below."
-    ],
+    "introParagraph": "We're always happy to hear from players, journalists, content creators, and potential partners.",
+    "businessParagraph": {
+      "before": "For business inquiries, publishing opportunities, investment proposals, media requests, or other ",
+      "accent": "partnership opportunities, please contact us using the studio's business email",
+      "after": "."
+    },
+    "ceoParagraph": "If you'd like to reach the CEO directly, you can also use the personal contact email.",
     "studioEmailLabel": "Studio Business Email",
-    "ceoLabel": "CEO",
-    "footerTagline": "We create games for players, build our own universe, and tell stories worth exploring."
+    "ceoLabel": "CEO"
   },
   "media": {
     "gameArtworkAlt": "INFOGRIND key art featuring a futuristic armored character",
     "galleryAlt": [
-      "A dark monolithic tower silhouetted against an orange sunset in the INFOGRIND world",
       "Three humanoid robots standing in the rain under orange lights",
       "A retro-futuristic control room with terminals overlooking a rainy city",
       "Compact futuristic living quarters with a bed, workstation, and storage",

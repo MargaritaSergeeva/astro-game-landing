@@ -1,0 +1,714 @@
+---
+import type { ImageMetadata } from 'astro';
+import closeIcon from '../assets/icons/close.svg';
+import searchIcon from '../assets/icons/search.svg';
+import { siteConfig } from '../config/site';
+import type { Translations } from '../i18n/loader';
+import SectionMarker from './SectionMarker.astro';
+
+interface Props {
+  translation: Translations;
+}
+
+const { translation } = Astro.props;
+const getSortedImages = (modules: Record<string, { default: ImageMetadata }>) =>
+  Object.entries(modules)
+    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+    .map(([, module]) => module.default);
+const slides = getSortedImages(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/slider/*.webp', {
+    eager: true,
+  }),
+);
+const largeSlides = getSortedImages(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/slider/big-slides/*.webp', {
+    eager: true,
+  }),
+);
+const gallerySlides = slides.map((slide, index) => ({
+  alt: translation.media.galleryAlt[index],
+  largeSrc: largeSlides[index]?.src,
+  slide,
+}));
+---
+
+<section
+  class="about-section swiper-slide"
+  id="about"
+  data-section="about"
+  aria-labelledby="about-title"
+>
+  <div class="about-section__inner container">
+    <SectionMarker index={translation.about.index} title={translation.about.title} />
+    <div class="about-section__layout">
+      <div class="about-section__content">
+        <h2 id="about-title">
+          <span>{translation.about.displayTitle}</span>
+          <span class="about-section__title-accent">{translation.about.displayTitleAccent}</span>
+        </h2>
+        <div class="about-section__copy swiper-no-swiping">
+          {translation.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+        <div class="about-section__metrics">
+          <div>
+            <strong>{siteConfig.foundedYear}</strong>
+            <span>{translation.about.foundedLabel}</span>
+          </div>
+          <div>
+            <strong>{translation.about.teamValue}</strong>
+            <span>{translation.about.teamLabel}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-gallery-shell">
+        <div
+          class="about-gallery swiper"
+          data-gallery-slider
+          tabindex="0"
+          aria-label={translation.about.galleryLabel}
+        >
+          <div class="about-gallery__wrapper swiper-wrapper">
+            {
+              gallerySlides.map(({ alt, slide }, index) => (
+                <div class="about-gallery__slide swiper-slide">
+                  <button
+                    class="about-gallery__open"
+                    type="button"
+                    data-gallery-open
+                    data-gallery-index={index}
+                    style={`--gallery-zoom-icon: url("${searchIcon.src}");`}
+                    aria-label={`${translation.common.openFullSizeImage}: ${alt}`}
+                  >
+                    <img
+                      class="about-gallery__image"
+                      src={slide.src}
+                      alt={alt}
+                      width="800"
+                      height="450"
+                      loading="lazy"
+                    />
+                  </button>
+                </div>
+              ))
+            }
+          </div>
+          <span class="about-gallery__corner about-gallery__corner--top-left" aria-hidden="true"
+          ></span>
+          <span class="about-gallery__corner about-gallery__corner--top-right" aria-hidden="true"
+          ></span>
+          <span class="about-gallery__corner about-gallery__corner--bottom-left" aria-hidden="true"
+          ></span>
+          <span class="about-gallery__corner about-gallery__corner--bottom-right" aria-hidden="true"
+          ></span>
+          <p class="about-gallery__counter" aria-live="polite" data-gallery-counter>
+            01 / {String(gallerySlides.length).padStart(2, '0')}
+          </p>
+        </div>
+        <div class="about-gallery__pagination" data-gallery-pagination></div>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="about-lightbox" data-gallery-modal aria-label={translation.common.fullSizeGallery}>
+    <button
+      class="about-lightbox__close"
+      type="button"
+      data-gallery-modal-close
+      aria-label={translation.common.closeGallery}
+      style={`--lightbox-close-icon: url("${closeIcon.src}");`}
+    >
+      <span aria-hidden="true"></span>
+    </button>
+    <div class="about-lightbox__stage">
+      <button
+        class="about-lightbox__nav about-lightbox__nav--prev"
+        type="button"
+        data-gallery-modal-prev
+        aria-label={translation.common.previousImage}
+      >
+        <span aria-hidden="true"></span>
+      </button>
+      <div class="about-lightbox__frame swiper" data-gallery-modal-slider>
+        <div class="about-lightbox__wrapper swiper-wrapper">
+          {
+            gallerySlides.map(({ alt, largeSrc, slide }) => (
+              <div class="about-lightbox__slide swiper-slide">
+                <img
+                  data-gallery-modal-image
+                  data-gallery-large-src={largeSrc}
+                  data-gallery-mobile-src={slide.src}
+                  alt={alt}
+                  loading="lazy"
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <button
+        class="about-lightbox__nav about-lightbox__nav--next"
+        type="button"
+        data-gallery-modal-next
+        aria-label={translation.common.nextImage}
+      >
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </dialog>
+</section>
+
+<script>
+  import '../scripts/about-gallery';
+</script>
+
+<style>
+  .about-section {
+    min-height: 100dvh;
+    padding-block: 140px 72px;
+    overflow: hidden;
+    scroll-margin-top: 84px;
+  }
+
+  .about-section__inner {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 46px;
+    min-height: calc(100dvh - 212px);
+  }
+
+  .about-section__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    min-height: 0;
+  }
+
+  .about-section__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-right: clamp(20px, 3vw, 64px);
+  }
+
+  .about-section h2 {
+    display: grid;
+    font-family: var(--font-display);
+    font-size: clamp(40px, min(3.4vw, 5.948dvh), 64px);
+    font-weight: var(--font-weight-heavy);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .about-section__title-accent {
+    color: var(--color-accent);
+  }
+
+  .about-section__copy {
+    display: grid;
+    flex: 1 1 auto;
+    gap: clamp(10px, 1.673dvh, 18px);
+    min-height: 0;
+    max-height: 260px;
+    padding-right: 16px;
+    margin-top: clamp(18px, 3.717dvh, 40px);
+    overflow-y: auto;
+    font-size: clamp(14px, min(1.1vw, 1.859dvh), 20px);
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    scrollbar-color: var(--color-accent) transparent;
+  }
+
+  .about-section__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding-top: clamp(18px, 3.903dvh, 42px);
+    margin-top: clamp(18px, 3.903dvh, 42px);
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .about-section__metrics div {
+    display: grid;
+    gap: clamp(8px, 1.301dvh, 14px);
+  }
+
+  .about-section__metrics strong {
+    font-size: clamp(48px, min(4.6vw, 8.178dvh), var(--type-stat-size));
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    color: var(--color-accent);
+  }
+
+  .about-section__metrics span {
+    font-size: clamp(16px, 1.859dvh, 20px);
+    line-height: 28px;
+    color: var(--color-text-muted);
+  }
+
+  .about-gallery-shell {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(12px, 2.974dvh, 32px);
+    align-self: center;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .about-gallery {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: 742px;
+    border: 1px solid var(--color-border-muted);
+  }
+
+  .about-gallery__wrapper,
+  .about-gallery__slide {
+    height: 100%;
+  }
+
+  .about-gallery__open {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    cursor: zoom-in;
+    background: transparent;
+    border: 0;
+  }
+
+  .about-gallery__open::before,
+  .about-gallery__open::after {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    content: '';
+    opacity: 0;
+    transition: opacity 360ms var(--ease-standard);
+  }
+
+  .about-gallery__open::before {
+    inset: 0;
+    background: rgb(15 15 15 / 42%);
+  }
+
+  .about-gallery__open::after {
+    top: 50%;
+    left: 50%;
+    width: 54px;
+    height: 54px;
+    background-color: var(--color-accent);
+    mask: var(--gallery-zoom-icon) center / contain no-repeat;
+    transform: translate(-50%, -50%);
+  }
+
+  .about-gallery__open:hover::before,
+  .about-gallery__open:hover::after,
+  .about-gallery__open:focus-visible::before,
+  .about-gallery__open:focus-visible::after {
+    opacity: 1;
+  }
+
+  .about-gallery__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-gallery__corner {
+    position: absolute;
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    pointer-events: none;
+  }
+
+  .about-gallery__corner--top-left {
+    top: 30px;
+    left: 30px;
+    border-top: 2px solid var(--color-accent);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__corner--top-right {
+    top: 30px;
+    right: 30px;
+    border-top: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__corner--bottom-left {
+    bottom: 30px;
+    left: 30px;
+    border-bottom: 2px solid var(--color-accent);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__corner--bottom-right {
+    right: 30px;
+    bottom: 30px;
+    border-right: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .about-gallery__pagination {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    min-height: 16px;
+  }
+
+  .about-gallery__counter {
+    display: none;
+  }
+
+  .about-lightbox {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    padding: clamp(56px, 7dvh, 88px) clamp(24px, 5vw, 96px) clamp(32px, 5dvh, 72px);
+    color: var(--color-text);
+    background: rgb(15 15 15 / 92%);
+    border: 0;
+  }
+
+  .about-lightbox::backdrop {
+    background: rgb(0 0 0 / 78%);
+  }
+
+  .about-lightbox[open] {
+    display: block;
+  }
+
+  .about-lightbox__close {
+    position: fixed;
+    top: clamp(16px, 1.6vw, 28px);
+    right: clamp(16px, 1.6vw, 28px);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-control);
+    border: 0;
+    border-radius: 50%;
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .about-lightbox__close span {
+    width: 24px;
+    height: 24px;
+    background-color: currentcolor;
+    mask: var(--lightbox-close-icon) center / contain no-repeat;
+  }
+
+  .about-lightbox__stage {
+    position: relative;
+    width: min(100%, 1600px);
+    height: min(100%, 90dvh);
+    max-height: calc(100dvh - clamp(112px, 14dvh, 160px));
+    margin: auto;
+  }
+
+  .about-lightbox__frame {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-border-muted);
+  }
+
+  .about-lightbox__wrapper,
+  .about-lightbox__slide {
+    height: 100%;
+  }
+
+  .about-lightbox__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    color: var(--color-text);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    transform: translateY(-50%);
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .about-lightbox__nav span {
+    width: 34px;
+    height: 34px;
+    border-top: 3px solid currentcolor;
+    border-left: 3px solid currentcolor;
+  }
+
+  .about-lightbox__nav:hover,
+  .about-lightbox__nav:focus-visible {
+    color: var(--color-accent);
+    outline: none;
+  }
+
+  .about-lightbox__nav--prev {
+    left: clamp(-80px, -4vw, -48px);
+  }
+
+  .about-lightbox__nav--prev span {
+    transform: rotate(-45deg);
+  }
+
+  .about-lightbox__nav--next {
+    right: clamp(-80px, -4vw, -48px);
+  }
+
+  .about-lightbox__nav--next span {
+    transform: rotate(135deg);
+  }
+
+  @media (width >= 1024px) {
+    .about-section {
+      height: 100dvh;
+      min-height: 0;
+      padding-block: var(--section-padding-top-fluid) var(--section-padding-bottom-fluid);
+    }
+
+    .about-section__inner {
+      gap: var(--section-gap-fluid);
+      height: 100%;
+      min-height: 0;
+    }
+
+    .about-section__layout {
+      height: 100%;
+      min-height: 0;
+    }
+
+    .about-lightbox__close:hover,
+    .about-lightbox__close:focus-visible {
+      color: var(--color-accent);
+      outline: none;
+    }
+  }
+
+  @media (768px <= width <= 1023px) {
+    .about-section {
+      padding-block: 112px 48px;
+      overflow: visible;
+    }
+
+    .about-section__inner {
+      display: block;
+      min-height: 0;
+    }
+
+    .about-section__layout {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin-top: 32px;
+    }
+
+    .about-section__content {
+      display: block;
+      padding-right: 0;
+    }
+
+    .about-section__copy {
+      max-height: none;
+      padding-right: 0;
+      overflow: visible;
+    }
+
+    .about-gallery-shell {
+      display: grid;
+      grid-template-rows: auto auto;
+      height: auto;
+    }
+
+    .about-gallery {
+      height: auto;
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (width <= 767px) {
+    .about-section {
+      min-height: 0;
+      padding-block: 24px 48px;
+      overflow: visible;
+    }
+
+    .about-section__inner {
+      display: block;
+      min-height: 0;
+    }
+
+    .about-section__layout {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .about-section__content {
+      display: block;
+      padding-right: 0;
+    }
+
+    .about-section h2 {
+      font-size: 32px;
+    }
+
+    .about-section__copy {
+      gap: 18px;
+      max-height: none;
+      padding-right: 0;
+      margin-top: 20px;
+      overflow: visible;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .about-section__metrics {
+      padding-top: 30px;
+      margin-top: 30px;
+    }
+
+    .about-section__metrics strong {
+      font-size: 32px;
+      line-height: 44px;
+    }
+
+    .about-section__metrics span {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .about-gallery {
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+
+    .about-gallery-shell {
+      display: block;
+      height: auto;
+    }
+
+    .about-gallery__corner {
+      width: 32px;
+      height: 32px;
+    }
+
+    .about-gallery__corner--top-left {
+      top: 10px;
+      left: 10px;
+    }
+
+    .about-gallery__corner--top-right {
+      top: 10px;
+      right: 10px;
+    }
+
+    .about-gallery__corner--bottom-left {
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .about-gallery__corner--bottom-right {
+      right: 10px;
+      bottom: 10px;
+    }
+
+    .about-gallery__pagination {
+      display: none;
+    }
+
+    .about-gallery__counter {
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      z-index: 3;
+      display: block;
+      padding: 4px 8px;
+      font-size: 12px;
+      line-height: 16px;
+      background: rgb(15 15 15 / 70%);
+    }
+
+    .about-gallery__open {
+      cursor: grab;
+    }
+
+    .about-gallery__open::before,
+    .about-gallery__open::after {
+      display: none;
+    }
+
+    .about-lightbox {
+      align-items: center;
+      justify-content: center;
+      padding: 72px 16px 40px;
+    }
+
+    .about-lightbox__close:focus-visible {
+      color: var(--color-text);
+      outline: none;
+    }
+
+    .about-lightbox[open] {
+      display: flex;
+    }
+
+    .about-lightbox__stage {
+      width: 100%;
+      height: auto;
+      max-height: calc(100dvh - 104px);
+      aspect-ratio: 16 / 9;
+      margin: 0;
+    }
+
+    .about-lightbox__nav {
+      top: 50%;
+      bottom: auto;
+      width: 48px;
+      height: 48px;
+      transform: translateY(-50%);
+    }
+
+    .about-lightbox__nav span {
+      width: 24px;
+      height: 24px;
+      border-width: 2px;
+    }
+
+    .about-lightbox__slide img {
+      object-fit: contain;
+    }
+
+    .about-lightbox__nav--prev {
+      left: 6px;
+    }
+
+    .about-lightbox__nav--next {
+      right: 6px;
+    }
+  }
+</style>
