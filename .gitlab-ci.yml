@@ -1,0 +1,4 @@
+include:
+  - project: 'DevOps/templates-ci'
+    ref: main
+    file: 'default.yaml'
